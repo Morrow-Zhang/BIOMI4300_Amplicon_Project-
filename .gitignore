@@ -1,5 +1,6 @@
 # Large sequencing files
 *.fastq
+*.fastq.gz
 # R-generated files
 .Rhistory
 .RData
