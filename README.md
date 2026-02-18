@@ -1,4 +1,4 @@
-The dataset that I will use for my project comes from a previously published study that investigates the association between gut microbiota and suicidal behavior in major depressive order (MDD) patients. 
+The dataset that I will use for my project comes from a previously published study that investigates the association between gut microbiota and suicidal behavior in major depressive disorder (MDD) patients. 
 
 Link to the paper: 10.1016/j.bbih.2025.101081
 
