@@ -1,0 +1,432 @@
+---
+title: "Assign ASVs with DADA2"
+author: "Morrow Zhang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup}
+set.seed(238428)
+n_threads <- 50
+start_time <- Sys.time()
+
+pacman::p_load(
+  tidyverse, devtools, dada2, phyloseq,
+  patchwork, DT, install = FALSE)
+```
+
+```{r}
+filtered_fastqs_path <- "data/01_QualityTrimming/filtered_fastqs"
+
+filtered_forward_reads <- 
+  list.files(filtered_fastqs_path,
+             pattern = "R1_filtered.fastq.gz",
+             full.names = TRUE)
+
+filtered_reverse_reads <- 
+  list.files(filtered_fastqs_path,
+             pattern = "R2_filtered.fastq.gz",
+             full.names = TRUE)
+
+sample_names <- sapply(strsplit(basename(filtered_forward_reads), "_"), `[`, 1)
+```
+
+```{r}
+error_forward_reads <- 
+  learnErrors(filtered_forward_reads,
+              multithread = n_threads)
+forward_error_plot <- 
+  plotErrors(error_forward_reads, nominalQ = TRUE) + 
+  labs(title = "Forward Reads: Error Model")
+error_reverse_reads <- 
+  learnErrors(filtered_reverse_reads,
+              multithread = n_threads)
+reverse_error_plot <- 
+  plotErrors(error_reverse_reads, nominalQ = TRUE) +
+  labs(title = "Reverse Reads: Error Model")
+
+forward_error_plot + reverse_error_plot
+
+```
+
+
+
+```{r infer ASV}
+
+
+dada_forward <- 
+  dada(
+    filtered_forward_reads,
+    err = error_forward_reads,
+    multithread = n_threads
+  )
+
+dada_reverse <- 
+  dada(
+    filtered_reverse_reads,
+    err = error_reverse_reads,
+    multithread = n_threads
+  )
+
+
+
+```
+
+```{r merge}
+merged_ASVs <- 
+  mergePairs(
+    dada_forward, filtered_forward_reads,
+    dada_reverse, filtered_reverse_reads,
+    verbose = TRUE
+  )
+
+typeof(merged_ASVs)
+length(merged_ASVs)
+```
+```{r create raw count table}
+raw_ASV_table <- makeSequenceTable(merged_ASVs)
+dim(raw_ASV_table)
+typeof(raw_ASV_table)
+class(raw_ASV_table)
+```
+```{r}
+maxLength_ASV <- max(nchar(getSequences(raw_ASV_table)))
+minLength_ASV <- min(nchar(getSequences(raw_ASV_table)))
+meanLength_ASV <- mean(nchar(getSequences(raw_ASV_table)))
+medianLength_ASV <- median(nchar(getSequences(raw_ASV_table)))
+table(nchar(getSequences(raw_ASV_table)))
+
+
+
+```
+```{r}
+plot_ASVLength_raw <- 
+  data.frame(Seq_Length = nchar(getSequences(raw_ASV_table))) %>%
+  ggplot(aes(x = Seq_Length)) + 
+  geom_histogram() + 
+  scale_x_continuous(limits = c(0, maxLength_ASV + 5)) + 
+  labs(y = "Number of ASVs", x = "Raw ASV Length (bps)")
+
+plot_ASVLength_raw
+```
+```{r trimming}
+raw_ASV_table_trimmed <- 
+  raw_ASV_table[, nchar(colnames(raw_ASV_table)) == 403]
+table(nchar(getSequences(raw_ASV_table_trimmed)))
+percRetained_Trimmed <- sum(raw_ASV_table_trimmed) / sum(raw_ASV_table)
+percRetained_Trimmed
+
+plot_ASVLength_trimmed <- 
+  data.frame(Seq_Length = nchar(getSequences(raw_ASV_table_trimmed))) %>%
+  ggplot(aes(x = Seq_Length)) + 
+  geom_histogram() + 
+  scale_x_continuous(limits = c(0, maxLength_ASV + 5)) + 
+  labs(y = "Number of ASVs", x = "Trimmed ASV Length (bps)")
+
+plot_ASVLength_trimmed
+
+
+```
+
+```{r chimera}
+
+noChimeras_ASV_table <- 
+  removeBimeraDenovo(
+    raw_ASV_table_trimmed,
+    method = "consensus",
+    multithread = n_threads,
+    verbose = TRUE
+  )
+
+dim(noChimeras_ASV_table)
+
+
+percRetained_chimerasTrimmed <- sum(noChimeras_ASV_table) / sum(raw_ASV_table_trimmed)
+percRetained_chimerasRaw <- sum(noChimeras_ASV_table) / sum(raw_ASV_table)
+
+
+plot_ASVLength_NoChimeras <- 
+  data.frame(Seq_Length_NoChim = nchar(getSequences(noChimeras_ASV_table))) %>%
+  ggplot(aes(x = Seq_Length_NoChim)) + 
+  geom_histogram() + 
+  scale_x_continuous(limits = c(0, maxLength_ASV + 5)) + 
+  labs(y = "Number of ASVs \n (Post-Chimera Removal)", 
+       x = "ASV Length (bps)")
+
+plot_ASVLength_NoChimeraS <- plot_ASVLength_NoChimeras
+plot_ASVLength_NoChimeras
+```
+
+```{r}
+plot_ASVLength_raw + plot_ASVLength_trimmed + plot_ASVLength_NoChimeras + 
+  plot_annotation(tag_levels = 'A')
+```
+
+
+```{r track-reads, fig.width=6, fig.height=4}
+
+getN <- function(x) sum(getUniques(x))
+ 
+track <- cbind(
+  sapply(dada_forward, getN),
+  sapply(dada_reverse, getN),
+  sapply(merged_ASVs, getN),
+  rowSums(noChimeras_ASV_table)
+)
+
+head(track)
+
+
+colnames(track) <- c("denoisedF", "denoisedR", "merged", "nochim")
+rownames(track) <- row.names(noChimeras_ASV_table)
+
+
+track_counts_df <- 
+  track %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "sample_names")
+
+
+stopifnot(track_counts_df$sample_names == row.names(noChimeras_ASV_table))
+
+
+track_counts_df <- 
+  track_counts_df %>%
+  mutate(num_ASVs = rowSums(noChimeras_ASV_table > 1))
+
+DT::datatable(track_counts_df)
+
+track_counts_df %>%
+  pivot_longer(denoisedF:nochim, names_to = "read_type", values_to = "num_reads") %>%
+  mutate(read_type = fct_relevel(read_type, "denoisedF", "denoisedR", "merged", "nochim")) %>%
+  ggplot(aes(x = read_type, y = num_reads, fill = read_type)) + 
+  geom_line(aes(group = sample_names), color = "grey") + 
+  geom_point(shape = 21, size = 3, alpha = 0.8) + 
+  scale_fill_brewer(palette = "Spectral") + 
+  labs(x = "Filtering Step", y = "Number of Sequences") + 
+  theme_bw()
+
+
+```
+```{r}
+plot_ReadDepth <- 
+  track_counts_df %>%
+  ggplot(aes(x = nochim)) + 
+  geom_histogram() + 
+  labs(x = "Total # of Sequences", y = "# of Samples") + 
+  theme_bw()
+
+
+plot_ASVRichness <- 
+  track_counts_df %>%
+  ggplot(aes(x = num_ASVs)) + 
+  geom_histogram() + 
+  labs(x = "Total # of ASVs", y = "# of Samples") + 
+  theme_bw()
+
+
+plot_ReadDepth_ASVRichness <- 
+  track_counts_df %>%
+  ggplot(aes(x = nochim, y = num_ASVs)) + 
+  geom_point() + 
+  labs(x = "Total # of Sequences", y = "# of ASVs") + 
+  theme_bw()
+
+plot_ReadDepth + plot_ASVRichness + plot_ReadDepth_ASVRichness + 
+  plot_annotation(tag_levels = "A")
+```
+```{r}
+raw_fastqs_path <- "data/00_raw_gzipped_fastqs"
+
+forward_reads <- list.files(raw_fastqs_path, pattern = "_1.fastq.gz$", full.names = TRUE)
+
+filtered_fastqs_path <- "data/01_QualityTrimming/filtered_fastqs"
+expected <- readLines("SRR_Acc_List (3).txt")
+actual <- gsub("_1.fastq.gz", "", basename(forward_reads))
+setdiff(expected, actual)
+```
+```{r}
+metadata <- read.csv("SraRunTable (11).csv")
+metadata$AttemptStatus <- ifelse(
+  grepl("non attempters", metadata$source_material_id),
+  "Non-attempter",
+  "Attempter"
+)
+```
+
+
+```{r}
+taxa_train <- assignTaxonomy(
+  noChimeras_ASV_table,
+  refFasta = "/workdir/in_class_data/taxonomy/silva_nr99_v138.2_toGenus_trainset.fa.gz",
+  multithread = n_threads
+)
+
+taxa_addSpecies <- addSpecies(
+  taxa_train,
+  refFasta = "/workdir/in_class_data/taxonomy/silva_v138.2_assignSpecies.fa.gz"
+)
+
+dim(taxa_addSpecies)
+```
+
+```{r}
+taxa_print <- taxa_addSpecies 
+rownames(taxa_print) <- NULL
+head(taxa_print)
+```
+```{r}
+head(rownames(noChimeras_ASV_table))
+head(colnames(noChimeras_ASV_table))
+
+final_ASV_table_withSeqs <- t(noChimeras_ASV_table)
+
+head(rownames(final_ASV_table_withSeqs))
+head(colnames(final_ASV_table_withSeqs))
+```
+
+```{r}
+head(sample_names)
+head(colnames(final_ASV_table_withSeqs))
+head(sapply(strsplit(colnames(final_ASV_table_withSeqs), "_"), `[`, 1))
+```
+```{r}
+stopifnot(sapply(strsplit(colnames(final_ASV_table_withSeqs), "_"), `[`,1) == sample_names)
+
+colnames(final_ASV_table_withSeqs) <- sample_names
+head(colnames(final_ASV_table_withSeqs))
+```
+
+```{r}
+ASV_seqs <- rownames(final_ASV_table_withSeqs)
+ASV_seqs[1:5]
+num_ASVs <- dim(final_ASV_table_withSeqs)[1] # select the number of rows
+num_ASVs 
+```
+```{r}
+ASV_headers <- vector(num_ASVs, mode = "character")
+
+ASV_headers[1:5]
+
+length(ASV_headers)
+
+for (i in 1:num_ASVs) {
+  ASV_number <- sprintf("%04d", i)
+  ASV_headers[i] <- paste(">ASV", ASV_number, sep = "_")
+}
+
+ASV_headers[1:5]
+
+final_ASV_table <- final_ASV_table_withSeqs
+
+glimpse(final_ASV_table)
+
+row.names(final_ASV_table) <- sub(">", "", ASV_headers)
+final_ASV_table[1:5, 1:5]
+```
+```{r}
+write.table(final_ASV_table_withSeqs,
+            file = "data/ASV_table_withSeqNames.tsv",
+            sep = "\t", quote = FALSE, col.names = NA)
+
+write.table(final_ASV_table,
+            file = "data/ASV_table.tsv",
+            sep = "\t", quote = FALSE, col.names = NA)
+```
+
+```{r}
+head(ASV_headers, n = 2)
+
+head(ASV_seqs, n = 2)
+
+ASV_fasta <- c(rbind(ASV_headers, ASV_seqs))
+
+head(ASV_fasta, n = 4)
+
+writeLines(ASV_fasta,
+           con = "data/ASVs.fasta")
+```
+```{r}
+dim(taxa_addSpecies)
+colnames(taxa_addSpecies)
+head(rownames(taxa_addSpecies), n = 2)
+class(taxa_addSpecies)
+
+new_tax_table <-
+  taxa_addSpecies %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "ASVseqs")
+
+glimpse(new_tax_table)
+
+stopifnot(new_tax_table$ASVseqs == rownames(final_ASV_table_withSeqs))
+
+rownames(new_tax_table) <- rownames(final_ASV_table)
+
+head(new_tax_table)
+```
+```{r}
+ASV_tax_table <-
+  new_tax_table %>%
+  mutate(ASV = rownames(final_ASV_table)) %>%
+  dplyr::select(Kingdom, Phylum, Class, Order, Family, Genus, Species, ASV, ASVseqs)
+
+rownames(ASV_tax_table) <- ASV_tax_table$ASV
+
+glimpse(ASV_tax_table)
+
+stopifnot(
+  ASV_tax_table$ASV == rownames(ASV_tax_table),
+  rownames(ASV_tax_table) == rownames(ASV_tax_table)
+)
+
+write.table(
+  ASV_tax_table,
+  file = "data/ASV_taxonomy.tsv",
+  sep = "\t",
+  quote = FALSE,
+  col.names = NA
+)
+```
+```{r}
+save(track_counts_df, file = "data/track_read_counts.RData")
+```
+
+```{r}
+metadata_physeq <- read.csv("SraRunTable (11).csv")
+head(metadata_physeq)
+dim(metadata_physeq)
+
+rownames(metadata_physeq) <- metadata_physeq$Run
+head(rownames(metadata_physeq))
+
+head(colnames(final_ASV_table))
+head(rownames(metadata_physeq))
+
+metadata_physeq <- sample_data(metadata_physeq)
+metadata_physeq
+
+```
+```{r}
+sample_names(metadata_physeq)
+length(sample_names(metadata_physeq))
+```
+
+```{r}
+raw_physeq <- phyloseq(
+  otu_table(final_ASV_table, taxa_are_rows = TRUE),
+  tax_table(as.matrix(ASV_tax_table)),
+  metadata_physeq
+)
+
+raw_physeq
+
+save(raw_physeq, file = "data/raw_physeq.RData")
+```
+
+```{r}
+rm(otu, sample_data_obj, metadata)
+ls()
+```
+
+
