@@ -1,0 +1,335 @@
+---
+title: "04_Biodiversity.Rmd"
+author: "Morrow Zhang"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup}
+start_time <- Sys.time()
+set.seed(238428)
+pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq,
+               # packages for stats
+               ggpubr, rstatix, install = FALSE)
+
+```
+
+```{r}
+load("data/preprocessed_phyloseq.RData")
+preprocessed_physeq
+min(sample_sums(preprocessed_physeq))
+
+metadata_df <- 
+  preprocessed_physeq %>%
+  sample_data() %>%
+  data.frame()
+
+
+glimpse(metadata_df)
+```
+```{r}
+iNEXT_input_df <- 
+  preprocessed_physeq %>%
+  otu_table() %>%
+  data.frame()
+
+dim(iNEXT_input_df)
+iNEXT_input_df[1:5, 1:5]
+```
+```{r}
+iNEXT_data <- iNEXT(
+  iNEXT_input_df,
+  q = c(0, 1, 2),
+  datatype = "abundance"
+)
+
+
+save(iNEXT_data, file = "data/iNEXT_data.RData")
+```
+
+```{r}
+str(iNEXT_data)
+typeof(iNEXT_data)
+```
+
+```{r}
+color_df <- 
+  iNEXT_input_df %>%
+  colnames() %>%
+  data.frame()
+
+head(color_df)
+
+colnames(color_df)[1] <- "names"
+
+head(color_df)
+
+iNEXT_color_df <- 
+  color_df %>%
+  # Merge with metadata
+  left_join(metadata_df, by = c("names" = "Run")) %>%
+  # Add colors for plotting by your real grouping
+  mutate(
+    AttemptStatus = ifelse(
+      grepl("non attempters", source_material_id),
+      "Non-attempter",
+      "Attempter"
+    ),
+    attempt_colors = ifelse(
+      AttemptStatus == "Non-attempter",
+      "blue",
+      "red"
+    )
+  )
+
+head(iNEXT_color_df)
+```
+```{r}
+ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
+  scale_color_manual(values = iNEXT_color_df$attempt_colors) + 
+  scale_fill_manual(values = iNEXT_color_df$attempt_colors) + 
+  theme_bw() + 
+  theme(legend.position = "none") + 
+  labs(y = "Effective Number of ASVs", x = "Number of Sequences")
+```
+```{r}
+iNEXT_manual_df <- 
+  iNEXT_data$iNextEst$size_based %>%
+  dplyr::rename(names = Assemblage) %>%
+  left_join(metadata_df, by = c("names" = "Run")) %>%
+  mutate(
+    AttemptStatus = ifelse(
+      grepl("non attempters", source_material_id),
+      "Non-attempter",
+      "Attempter"
+    )
+  )
+
+
+dim(iNEXT_manual_df)
+
+iNEXT_manual_df %>%
+  # Filter out rows that are calculated with actual sequences (no extrapolated)
+  dplyr::filter(Method == "Rarefaction") %>%
+  # Now, let's draw the plot! 
+  ggplot(aes(x = m, y = qD, color = AttemptStatus, group = names)) + 
+  geom_line() + 
+  facet_grid(Order.q ~ AttemptStatus, scales = "free") + 
+  scale_color_manual(values = c(
+    "Attempter" = "red",
+    "Non-attempter" = "blue"
+  )) + 
+  theme_bw() + 
+  labs(y = "Effective Number of ASVs", x = "Number of Sequences") + 
+  theme(legend.position = "bottom")
+```
+
+
+### Interpretation 1 
+For the ggiNEXT and manual rarefaction curve plots, there should be enough sequences to analyze for q = 1 and q = 2, but not for q = 0 because many curves in q = 0 are still increasing and have not fully plateaued. Because of that, valid conclusion can be drawn on species richness when q = 1 and q = 2, because the curves stabilize clearly. However, it is probably not valid to draw conclusion when q = 0, because some curves are still increasing.
+
+
+
+```{r}
+distinct_metadata_df <- metadata_df
+shapiro.test(distinct_metadata_df$AvgSpotLen)
+
+obs_div_df <- 
+  iNEXT_manual_df %>%
+  dplyr::filter(Method == "Observed")
+glimpse(obs_div_df)
+
+
+```
+```{r}
+obs_whole_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 0)
+
+shapiro.test(obs_whole_rich_df$qD)
+```
+# p-value is less than 0.5 > my data is not normal 
+
+
+
+
+
+```{r}
+kw_attempt_rich <- 
+  obs_whole_rich_df %>%
+  kruskal_test(qD ~ AttemptStatus)
+
+kw_attempt_rich
+```
+
+
+```{r}
+attempt_ggboxplot <- 
+  ggboxplot(obs_whole_rich_df, x = "AttemptStatus", y = "qD", 
+            color = "AttemptStatus", fill = "AttemptStatus", alpha = 0.3,
+            outlier.shape = NA) + 
+  # Add points
+  geom_jitter(aes(color = AttemptStatus)) + 
+  scale_color_manual(values = c("Attempter" = "red",
+                                "Non-attempter" = "blue")) + 
+  scale_fill_manual(values = c("Attempter" = "red",
+                               "Non-attempter" = "blue")) + 
+  labs(y = "# of Total ASVs (Richness)") + 
+  # Now, let's add the KW results 
+  labs(subtitle = get_test_label(kw_attempt_rich, detailed = TRUE)) + 
+  theme_bw() + 
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 30,
+                                   hjust = 1, 
+                                   vjust = 1))
+
+# Show the plot
+attempt_ggboxplot
+```
+
+```{r}
+obs_div_df %>%
+  ggplot(aes(x = AttemptStatus, y = qD, fill = AttemptStatus, 
+             color = AttemptStatus)) + 
+  facet_wrap(.~Order.q, scales = "free_y") + 
+  geom_jitter() + 
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) + 
+  scale_color_manual(values = c("Attempter" = "red",
+                                "Non-attempter" = "blue")) + 
+  scale_fill_manual(values = c("Attempter" = "red",
+                               "Non-attempter" = "blue")) + 
+  labs(y = "Effective Number of ASVs") + 
+  theme_bw() + 
+  theme(legend.position = "bottom",
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 30,
+                                   hjust = 1, 
+                                   vjust = 1))
+```
+```{r q = 0}
+# I use Wilcox instead of ANOVA, because my data is not normal.
+
+obs_rich_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 0)
+
+
+wilcox_attempt_rich <- 
+  wilcox_test(qD ~ AttemptStatus, data = obs_rich_df, alternative = "greater")
+
+
+wilcox_attempt_rich
+```
+```{r q = 1}
+obs_shannon_df <-
+  obs_div_df %>%
+  dplyr::filter(Order.q == 1)
+
+wilcox_attempt_shannon <-
+  wilcox_test(qD ~ AttemptStatus,
+               data = obs_shannon_df, alternative = "greater")
+
+wilcox_attempt_shannon
+```
+
+```{r q = 2}
+obs_simpson_df <-
+  obs_div_df %>%
+  dplyr::filter(Order.q == 2)
+
+wilcox_attempt_simpson <-
+  wilcox_test(qD ~ AttemptStatus,
+               data = obs_simpson_df, alternative = "greater")
+
+wilcox_attempt_simpson
+```
+
+```{r}
+obs_simps_df <- 
+  obs_div_df %>%
+  dplyr::filter(Order.q == 2)
+obs_simps_df
+```
+
+```{r}
+
+#Rich 
+rich_ggboxplot <- 
+  ggboxplot(obs_rich_df, x = "AttemptStatus", y = "qD", 
+            color = "AttemptStatus", fill = "AttemptStatus", alpha = 0.3,
+            outlier.shape = NA) + 
+ 
+  geom_jitter(aes(color = AttemptStatus)) + 
+  scale_color_manual(values = c("Attempter" = "red",
+                                "Non-attempter" = "blue")) + 
+  scale_fill_manual(values = c("Attempter" = "red",
+                               "Non-attempter" = "blue")) + 
+  labs(y = "# of Total ASVs (Richness)") + 
+  # Add Wilcoxon
+  stat_compare_means(method = "wilcox.test", label.y = min(obs_rich_df$qD) - 5) + 
+  theme_bw() + 
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 30,
+                                   hjust = 1, 
+                                   vjust = 1))
+
+rich_ggboxplot
+```
+
+
+```{r}
+# Simpson by AttemptStatus 
+simps_ggboxplot <- 
+  ggboxplot(obs_simps_df, x = "AttemptStatus", y = "qD", 
+            color = "AttemptStatus", fill = "AttemptStatus", alpha = 0.3,
+            outlier.shape = NA) + 
+
+
+  geom_jitter(aes(color = AttemptStatus)) + 
+
+  scale_color_manual(values = c("Attempter" = "red",
+                                "Non-attempter" = "blue")) + 
+
+  scale_fill_manual(values = c("Attempter" = "red",
+                               "Non-attempter" = "blue")) + 
+
+  labs(y = "# of Dominant ASVs (Simpson)") +
+
+  # Add Wilcoxon
+  stat_compare_means(method = "wilcox.test",
+                     label.y = min(obs_simps_df$qD) - 2) + 
+
+  theme_bw() + 
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 30,
+                                   hjust = 1,
+                                   vjust = 1))
+
+simps_ggboxplot
+```
+```{r}
+rich_ggboxplot + simps_ggboxplot
+```
+
+
+### Interpretation 2
+Wilcoxon rank-sum tests using a one-sided alternative hypothesis showed no significant differences in alpha diversity between suicide attempters and non-attempters across all diversity levels. When q = 0, p value is 0.11. When q = 1, p value is 0.237. When q = 2, p value is 0.443. Overall, these results fail to reject the null hypothesis and indicate that hospitalized MDD patients with recent suicide attempts do not exhibit significantly higher gut microbial alpha diversity compared to those without a history of suicide attempts.
+
+
+### Interpretation 3
+I statistically tested my scientific question using Wilcoxon rank-sum tests to compare alpha diversity between suicide attempters and non-attempters. I used this test because my variable of interest, Attempt Status, is categorical, and my alpha diversity data were not normally distributed, making a non-parametric test more appropriate than ANOVA. I conducted separate one-sided Wilcoxon tests for richness (q = 0), Shannon diversity (q = 1), and Simpson diversity (q = 2), using an alternative hypothesis that alpha diversity would be greater in attempters compared to non-attempters. This allowed me to statistically evaluate whether gut microbial diversity differed between groups across all ASVs, common ASVs, and dominant ASVs.
+
+
+```{r}
+end_time <- Sys.time()
+end_time 
+elapsed_time <- round((end_time - start_time), 3)
+elapsed_time
+devtools::session_info()
+```
+
