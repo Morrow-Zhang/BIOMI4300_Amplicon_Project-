@@ -1,0 +1,221 @@
+---
+title: "03_PreProcessing_Lecture.Rmd"
+author: "Morrow Zhang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r }
+set.seed(238428)
+start_time <- Sys.time()
+pacman::p_load(devtools, phyloseq, Biostrings, tidyverse, dada2, patchwork,
+               # Note to add ggpubr & rstatix!!
+               ggpubr, rstatix, install = FALSE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.align = "center",
+  fig.path = "figures/03_PreProcessing/"
+)
+```
+
+```{r}
+load("data/raw_physeq.RData")
+
+raw_physeq
+```
+
+```{r}
+noChloros_physeq <- 
+  raw_physeq %>% 
+  subset_taxa(Order != "Chloroplast" | is.na(Order))
+
+num_chloro_ASVs <- ntaxa(raw_physeq) - ntaxa(noChloros_physeq)
+num_chloro_ASVs
+
+noChlorosMitos_physeq <- 
+  noChloros_physeq %>%
+  subset_taxa(Family != "Mitochondria" | is.na(Family))
+
+num_mito_ASVs <- ntaxa(noChloros_physeq) - ntaxa(noChlorosMitos_physeq)
+num_mito_ASVs
+```
+
+### INTERPRETATION #1
+
+There were 0 chloroplast ASVs and 0 mitochondrial ASVs detected in my dataset. This seems reasonable because my samples are rectal swab microbiome samples from human patients, which are expected to primarily contain bacterial DNA rather than plant-derived chloroplast sequences. Additionally, the study included contamination monitoring and filtering steps, which likely removed potential mitochondrial or chloroplast sequences if present.
+
+```{r}
+sample_names(noChlorosMitos_physeq)
+```
+### INTERPRETATION #2
+
+No negative control samples were detected in my dataset. All sample names appear as SRR accession IDs, and none are labeled as controls.
+
+```{r}
+sample_data(noChlorosMitos_physeq)
+```
+### INTERPRETATION #3
+
+My dataset does not appear to include a mock community sample. The sample names in the downloaded dataset are all SRR accession IDs for human gut samples, and there is no sample labeled as a mock control. 
+
+
+```{r}
+
+tax_table <- 
+  noChlorosMitos_physeq %>%
+  tax_table() %>% 
+  data.frame()
+
+asv_names <- tax_table$ASV
+asv_seqs <- tax_table$ASVseqs
+
+asv_rev_comp <- matrix(nrow=length(asv_seqs), ncol = length(asv_seqs)) 
+
+rownames(asv_rev_comp) <- asv_names
+colnames(asv_rev_comp) <- asv_names
+
+asv_dna <- DNAStringSet(asv_seqs) 
+
+head(asv_dna)
+
+asv_rev_dna <- reverseComplement(asv_dna) 
+
+
+for(i in 1:length(asv_seqs)){ 
+  match_vec <- asv_dna[i] == asv_rev_dna 
+  asv_rev_comp[,i] <- match_vec 
+}
+
+cat("For", sum(asv_rev_comp) / 2,"ASVs, the reverse complement will need to be removed")
+```
+### INTERPRETATION #4
+
+There were 0 reverse complement ASVs detected in my dataset. This indicates that no ASV sequences were identified as reverse complements of each other, so no sequences need to be removed at this step. 
+
+
+```{r}
+
+metadata_df <- 
+  noChlorosMitos_physeq %>%
+  sample_data() %>%
+  data.frame() %>%
+  tibble::rownames_to_column(var = "names") %>%
+  dplyr::mutate(
+    AttemptStatus = ifelse(
+      grepl("non attempters", source_material_id),
+      "Non-attempter",
+      "Attempter"
+    )
+  )
+
+
+seqSums_df <- 
+  noChlorosMitos_physeq %>%
+  otu_table() %>%
+  colSums() %>%
+  data.frame() %>%
+  rownames_to_column(var = "names") %>%
+  left_join(., metadata_df, by = "names")
+
+colnames(seqSums_df)[2] <- "TotalSeqs"
+
+dim(seqSums_df)
+head(seqSums_df)
+
+```
+
+```{r}
+seqSums_df %>%
+  dplyr::select(names, TotalSeqs) %>%
+  arrange(TotalSeqs) %>%
+  head()
+```
+```{r}
+# bar plot 
+numSeq_bar_plot <- 
+  seqSums_df %>%
+  ggplot(aes(x = reorder(names, TotalSeqs), y = TotalSeqs,
+             fill = AttemptStatus)) + 
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_blank()) + 
+  labs(y = "Read Depth", x = "Sample") + 
+  theme(legend.position = "none")
+
+# histogram
+numSeq_hist_plot <- 
+  seqSums_df %>%
+  ggplot(aes(x = TotalSeqs, fill = AttemptStatus)) + 
+  geom_histogram(color = "black") + 
+  labs(y = "# of Samples", x = "Read Depth") + 
+  theme(legend.position = "bottom")
+
+# Density plot 
+numSeq_density_plot <- 
+  seqSums_df %>%
+  ggplot(aes(TotalSeqs, fill = AttemptStatus)) +
+  geom_density(alpha = 0.5) + 
+  labs(x = "Read Depth") + 
+  theme(legend.position = "none")
+
+numSeq_bar_plot + numSeq_hist_plot + numSeq_density_plot + 
+  plot_annotation(tag_levels = "A")
+```
+
+
+### INTERPRETATION #5
+
+The sequencing depth varies substantially across samples, with many samples having low read counts and a few samples having much higher sequencing depths. Most samples fall between approximately 200 and 1500 reads while a few samples have extremely low read counts below 100 reads. The distributions of sequencing depth appear similar between the attempter and non-attempter groups, indicating that sequencing depth is not strongly biased toward one group.
+
+Overall, a few samples likely do not have enough reads to reliably represent microbial diversity, particularly those with fewer than 100 reads. These very low-depth samples may need to be removed in later filtering steps to improve data quality and ensure more reliable downstream diversity analysis. 
+
+
+```{r}
+summary(seqSums_df$TotalSeqs)
+sum(seqSums_df$TotalSeqs < 100)
+
+seqSums_df %>%
+  dplyr::filter(TotalSeqs < 100) %>%
+  dplyr::select(names, TotalSeqs) %>%
+  dplyr::arrange(TotalSeqs)
+
+preprocessed_physeq <- 
+  prune_samples(
+    !(sample_names(noChlorosMitos_physeq) %in% c(
+      "SRR35320078",
+      "SRR35320071",
+      "SRR35320081",
+      "SRR35320073",
+      "SRR35320124"
+    )),
+    noChlorosMitos_physeq
+  )
+
+min(sample_sums(preprocessed_physeq))
+nsamples(preprocessed_physeq)
+```
+
+
+```{r}
+seqSums_df %>%
+  dplyr::select(names, TotalSeqs) %>%
+  arrange(TotalSeqs)
+```
+
+
+```{r}
+save(
+  preprocessed_physeq,
+  file = "data/preprocessed_phyloseq.RData"
+)
+```
+
+
+
+```{r}
+end_time <- Sys.time()
+end_time 
+elapsed_time <- round((end_time - start_time), 3)
+elapsed_time
+devtools::session_info()
+```
+
