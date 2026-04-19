@@ -1,0 +1,1572 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={04\_Biodiversity.Rmd},
+  pdfauthor={Morrow Zhang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{04\_Biodiversity.Rmd}
+\author{Morrow Zhang}
+\date{2026-04-19}
+
+\begin{document}
+\maketitle
+
+\hypertarget{scientific-questions-of-analysis}{%
+\subsubsection{Scientific Questions of
+Analysis}\label{scientific-questions-of-analysis}}
+
+Scientific Question: Do hospitalized patients with major depressive
+disorder (MDD) who have made a recent suicide attempt exhibit higher gut
+microbial alpha diversity compared to MDD patients without a history of
+suicide attempts?
+
+Alpha diversity Null hypothesis: There is no difference in gut microbial
+alpha diversity between hospitalized MDD patients with a recent suicide
+attempt and those without a history of suicide attempts.
+
+Alternative hypothesis: Hospitalized MDD patients with a recent suicide
+attempt exhibit higher gut microbial alpha diversity compared to MDD
+patients without a history of suicide attempts.
+
+\hypertarget{set-seed-and-load-packages}{%
+\section{Set seed and Load Packages}\label{set-seed-and-load-packages}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{start\_time }\OtherTok{\textless{}{-}} \FunctionTok{Sys.time}\NormalTok{()}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{238428}\NormalTok{)}
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(tidyverse, devtools, patchwork, iNEXT, phyloseq,}
+               \CommentTok{\# packages for stats}
+\NormalTok{               ggpubr, rstatix, }\AttributeTok{install =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{load}\NormalTok{(}\StringTok{"data/preprocessed\_phyloseq.RData"}\NormalTok{)}
+\NormalTok{preprocessed\_physeq}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## phyloseq-class experiment-level object
+## otu_table()   OTU Table:         [ 446 taxa and 44 samples ]
+## sample_data() Sample Data:       [ 44 samples by 37 sample variables ]
+## tax_table()   Taxonomy Table:    [ 446 taxa by 9 taxonomic ranks ]
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{min}\NormalTok{(}\FunctionTok{sample\_sums}\NormalTok{(preprocessed\_physeq))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 170
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{metadata\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  preprocessed\_physeq }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_data}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{data.frame}\NormalTok{()}
+
+
+\FunctionTok{glimpse}\NormalTok{(metadata\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 44
+## Columns: 37
+## $ Run                            <chr> "SRR35320041", "SRR35320051", "SRR35320~
+## $ Assay.Type                     <chr> "AMPLICON", "AMPLICON", "AMPLICON", "AM~
+## $ AvgSpotLen                     <int> 600, 601, 601, 600, 600, 601, 600, 600,~
+## $ Bases                          <int> 42870559, 52869386, 48220175, 27932952,~
+## $ BioProject                     <chr> "PRJNA1321953", "PRJNA1321953", "PRJNA1~
+## $ BioSample                      <chr> "SAMN51231085", "SAMN51231084", "SAMN51~
+## $ BioSampleModel                 <chr> "MIMS.me,MIGS/MIMS/MIMARKS.human-gut", ~
+## $ Bytes                          <int> 27501260, 33837100, 30319981, 17133688,~
+## $ Center.Name                    <chr> "JOHNS HOPKINS", "JOHNS HOPKINS", "JOHN~
+## $ Collection_Date                <chr> "2020/2022", "2020/2022", "2020/2022", ~
+## $ collection_method              <chr> "rectal swab", "rectal swab", "rectal s~
+## $ Consent                        <chr> "public", "public", "public", "public",~
+## $ DATASTORE.filetype             <chr> "fastq,run.zq,sra", "fastq,run.zq,sra",~
+## $ DATASTORE.provider             <chr> "gs,ncbi,s3", "gs,ncbi,s3", "gs,ncbi,s3~
+## $ DATASTORE.region               <chr> "gs.us-east1,ncbi.public,s3.us-east-1",~
+## $ env_broad_scale                <chr> "human gut metagenome", "human gut meta~
+## $ env_local_scale                <chr> "rectum", "rectum", "rectum", "rectum",~
+## $ env_medium                     <chr> "rectalal mucosa & stool", "rectalal mu~
+## $ Experiment                     <chr> "SRX30421935", "SRX30421925", "SRX30421~
+## $ geo_loc_name_country           <chr> "USA", "USA", "USA", "USA", "USA", "USA~
+## $ geo_loc_name_country_continent <chr> "North America", "North America", "Nort~
+## $ geo_loc_name                   <chr> "USA: Baltimore\\, MD", "USA: Baltimore~
+## $ Host                           <chr> "Homo sapiens", "Homo sapiens", "Homo s~
+## $ Instrument                     <chr> "Illumina MiSeq", "Illumina MiSeq", "Il~
+## $ lat_lon                        <chr> "39.2905 N 76.6104 W", "39.2905 N 76.61~
+## $ Library.Name                   <chr> "AMP_324-0065", "AMP_324-0059", "AMP_32~
+## $ LibraryLayout                  <chr> "PAIRED", "PAIRED", "PAIRED", "PAIRED",~
+## $ LibrarySelection               <chr> "PCR", "PCR", "PCR", "PCR", "PCR", "PCR~
+## $ LibrarySource                  <chr> "METAGENOMIC", "METAGENOMIC", "METAGENO~
+## $ Organism                       <chr> "human gut metagenome", "human gut meta~
+## $ Platform                       <chr> "ILLUMINA", "ILLUMINA", "ILLUMINA", "IL~
+## $ ReleaseDate                    <chr> "2025-09-10T00:00:00Z", "2025-09-10T00:~
+## $ create_date                    <chr> "2025-09-10T09:57:00Z", "2025-09-10T09:~
+## $ version                        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+## $ Sample.Name                    <chr> "324-0065", "324-0059", "324-0054", "32~
+## $ source_material_id             <chr> "324-0065_non attempters 2", "324-0059_~
+## $ SRA.Study                      <chr> "SRP618695", "SRP618695", "SRP618695", ~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iNEXT\_input\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  preprocessed\_physeq }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{otu\_table}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{data.frame}\NormalTok{()}
+
+\FunctionTok{dim}\NormalTok{(iNEXT\_input\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 446  44
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iNEXT\_input\_df[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          SRR35320041 SRR35320051 SRR35320062 SRR35320072 SRR35320074
+## ASV_0001          30          15           8           0           0
+## ASV_0002           0         207          25           0         171
+## ASV_0003         484          46          59          58          21
+## ASV_0004           0           0           0          45           0
+## ASV_0005           0           0           0           0           0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iNEXT\_data }\OtherTok{\textless{}{-}} \FunctionTok{iNEXT}\NormalTok{(}
+\NormalTok{  iNEXT\_input\_df,}
+  \AttributeTok{q =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{),}
+  \AttributeTok{datatype =} \StringTok{"abundance"}
+\NormalTok{)}
+
+
+\FunctionTok{save}\NormalTok{(iNEXT\_data, }\AttributeTok{file =} \StringTok{"data/iNEXT\_data.RData"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{str}\NormalTok{(iNEXT\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## List of 3
+##  $ DataInfo:'data.frame':    44 obs. of  14 variables:
+##   ..$ Assemblage: chr [1:44] "SRR35320041" "SRR35320051" "SRR35320062" "SRR35320072" ...
+##   ..$ n         : num [1:44] 565 357 170 366 240 271 805 357 1830 539 ...
+##   ..$ S.obs     : num [1:44] 5 19 15 15 9 11 13 19 9 15 ...
+##   ..$ SC        : num [1:44] 1 1 1 0.997 1 ...
+##   ..$ f1        : num [1:44] 0 0 0 1 0 0 0 1 0 0 ...
+##   ..$ f2        : num [1:44] 1 4 4 1 2 1 2 4 2 4 ...
+##   ..$ f3        : num [1:44] 0 4 1 5 1 0 3 3 2 2 ...
+##   ..$ f4        : num [1:44] 0 1 4 0 0 1 0 1 0 2 ...
+##   ..$ f5        : num [1:44] 1 1 0 0 1 0 1 1 0 0 ...
+##   ..$ f6        : num [1:44] 0 2 0 0 0 1 0 0 0 0 ...
+##   ..$ f7        : num [1:44] 0 1 2 0 1 1 0 1 2 1 ...
+##   ..$ f8        : num [1:44] 0 1 1 0 1 0 0 1 0 0 ...
+##   ..$ f9        : num [1:44] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..$ f10       : num [1:44] 0 0 0 0 0 0 0 1 0 0 ...
+##  $ iNextEst:List of 2
+##   ..$ size_based    :'data.frame':   5280 obs. of  10 variables:
+##   .. ..$ Assemblage: chr [1:5280] "SRR35320041" "SRR35320041" "SRR35320041" "SRR35320041" ...
+##   .. ..$ m         : num [1:5280] 1 32 63 94 126 157 188 219 251 282 ...
+##   .. ..$ Method    : chr [1:5280] "Rarefaction" "Rarefaction" "Rarefaction" "Rarefaction" ...
+##   .. ..$ Order.q   : num [1:5280] 0 0 0 0 0 0 0 0 0 0 ...
+##   .. ..$ qD        : num [1:5280] 1 3.13 3.63 3.9 4.11 ...
+##   .. ..$ qD.LCL    : num [1:5280] 1 2.87 3.25 3.45 3.61 ...
+##   .. ..$ qD.UCL    : num [1:5280] 1 3.39 4 4.35 4.62 ...
+##   .. ..$ SC        : num [1:5280] 0.742 0.975 0.989 0.993 0.994 ...
+##   .. ..$ SC.LCL    : num [1:5280] 0.689 0.967 0.986 0.99 0.992 ...
+##   .. ..$ SC.UCL    : num [1:5280] 0.795 0.982 0.993 0.995 0.996 ...
+##   ..$ coverage_based:'data.frame':   3336 obs. of  8 variables:
+##   .. ..$ Assemblage: chr [1:3336] "SRR35320041" "SRR35320041" "SRR35320041" "SRR35320041" ...
+##   .. ..$ SC        : num [1:3336] 0.742 0.975 0.989 0.993 0.994 ...
+##   .. ..$ m         : num [1:3336] 1 32 63 94 126 157 188 219 251 282 ...
+##   .. ..$ Method    : chr [1:3336] "Rarefaction" "Rarefaction" "Rarefaction" "Rarefaction" ...
+##   .. ..$ Order.q   : num [1:3336] 0 0 0 0 0 0 0 0 0 0 ...
+##   .. ..$ qD        : num [1:3336] 1 3.13 3.63 3.9 4.11 ...
+##   .. ..$ qD.LCL    : num [1:3336] 0.92 2.75 3.09 3.28 3.46 ...
+##   .. ..$ qD.UCL    : num [1:3336] 1.08 3.51 4.16 4.52 4.77 ...
+##  $ AsyEst  :'data.frame':    132 obs. of  7 variables:
+##   ..$ Assemblage: chr [1:132] "SRR35320041" "SRR35320041" "SRR35320041" "SRR35320051" ...
+##   ..$ Diversity : chr [1:132] "Species richness" "Shannon diversity" "Simpson diversity" "Species richness" ...
+##   ..$ Observed  : num [1:132] 5 1.73 1.35 19 5.37 ...
+##   ..$ Estimator : num [1:132] 5 1.74 1.35 19 5.51 ...
+##   ..$ s.e.      : num [1:132] 0.4038 0.063 0.0375 2.1495 0.4604 ...
+##   ..$ LCL       : num [1:132] 5 1.61 1.27 19 4.61 ...
+##   ..$ UCL       : num [1:132] 5.79 1.86 1.42 23.21 6.41 ...
+##  - attr(*, "class")= chr "iNEXT"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{typeof}\NormalTok{(iNEXT\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "list"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{color\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  iNEXT\_input\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{colnames}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{data.frame}\NormalTok{()}
+
+\FunctionTok{head}\NormalTok{(color\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             .
+## 1 SRR35320041
+## 2 SRR35320051
+## 3 SRR35320062
+## 4 SRR35320072
+## 5 SRR35320074
+## 6 SRR35320075
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{colnames}\NormalTok{(color\_df)[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"names"}
+
+\FunctionTok{head}\NormalTok{(color\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         names
+## 1 SRR35320041
+## 2 SRR35320051
+## 3 SRR35320062
+## 4 SRR35320072
+## 5 SRR35320074
+## 6 SRR35320075
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iNEXT\_color\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  color\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \CommentTok{\# Merge with metadata}
+  \FunctionTok{left\_join}\NormalTok{(metadata\_df, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"names"} \OtherTok{=} \StringTok{"Run"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \CommentTok{\# Add colors for plotting by your real grouping}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{AttemptStatus =} \FunctionTok{ifelse}\NormalTok{(}
+      \FunctionTok{grepl}\NormalTok{(}\StringTok{"non attempters"}\NormalTok{, source\_material\_id),}
+      \StringTok{"Non{-}attempter"}\NormalTok{,}
+      \StringTok{"Attempter"}
+\NormalTok{    ),}
+    \AttributeTok{attempt\_colors =} \FunctionTok{ifelse}\NormalTok{(}
+\NormalTok{      AttemptStatus }\SpecialCharTok{==} \StringTok{"Non{-}attempter"}\NormalTok{,}
+      \StringTok{"blue"}\NormalTok{,}
+      \StringTok{"red"}
+\NormalTok{    )}
+\NormalTok{  )}
+
+\FunctionTok{head}\NormalTok{(iNEXT\_color\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         names Assay.Type AvgSpotLen    Bases   BioProject    BioSample
+## 1 SRR35320041   AMPLICON        600 42870559 PRJNA1321953 SAMN51231085
+## 2 SRR35320051   AMPLICON        601 52869386 PRJNA1321953 SAMN51231084
+## 3 SRR35320062   AMPLICON        601 48220175 PRJNA1321953 SAMN51231083
+## 4 SRR35320072   AMPLICON        600 27932952 PRJNA1321953 SAMN51231126
+## 5 SRR35320074   AMPLICON        600 30216971 PRJNA1321953 SAMN51231124
+## 6 SRR35320075   AMPLICON        601 21387436 PRJNA1321953 SAMN51231123
+##                        BioSampleModel    Bytes   Center.Name Collection_Date
+## 1 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 27501260 JOHNS HOPKINS       2020/2022
+## 2 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 33837100 JOHNS HOPKINS       2020/2022
+## 3 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 30319981 JOHNS HOPKINS       2020/2022
+## 4 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 17133688 JOHNS HOPKINS       2020/2022
+## 5 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 18501507 JOHNS HOPKINS       2020/2022
+## 6 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 13196458 JOHNS HOPKINS       2020/2022
+##   collection_method Consent DATASTORE.filetype DATASTORE.provider
+## 1       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 2       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 3       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 4       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 5       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 6       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+##                       DATASTORE.region      env_broad_scale env_local_scale
+## 1 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 2 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 3 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 4 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 5 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 6 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+##                env_medium  Experiment geo_loc_name_country
+## 1 rectalal mucosa & stool SRX30421935                  USA
+## 2 rectalal mucosa & stool SRX30421925                  USA
+## 3 rectalal mucosa & stool SRX30421914                  USA
+## 4 rectalal mucosa & stool SRX30421904                  USA
+## 5 rectalal mucosa & stool SRX30421902                  USA
+## 6 rectalal mucosa & stool SRX30421901                  USA
+##   geo_loc_name_country_continent         geo_loc_name         Host
+## 1                  North America USA: Baltimore\\, MD Homo sapiens
+## 2                  North America USA: Baltimore\\, MD Homo sapiens
+## 3                  North America USA: Baltimore\\, MD Homo sapiens
+## 4                  North America USA: Baltimore\\, MD Homo sapiens
+## 5                  North America USA: Baltimore\\, MD Homo sapiens
+## 6                  North America USA: Baltimore\\, MD Homo sapiens
+##       Instrument             lat_lon Library.Name LibraryLayout
+## 1 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0065        PAIRED
+## 2 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0059        PAIRED
+## 3 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0054        PAIRED
+## 4 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0208        PAIRED
+## 5 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0201        PAIRED
+## 6 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0197        PAIRED
+##   LibrarySelection LibrarySource             Organism Platform
+## 1              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 2              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 3              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 4              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 5              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 6              PCR   METAGENOMIC human gut metagenome ILLUMINA
+##            ReleaseDate          create_date version Sample.Name
+## 1 2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0065
+## 2 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0059
+## 3 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0054
+## 4 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0208
+## 5 2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0201
+## 6 2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0197
+##           source_material_id SRA.Study AttemptStatus attempt_colors
+## 1  324-0065_non attempters 2 SRP618695 Non-attempter           blue
+## 2      324-0059_attempters 7 SRP618695     Attempter            red
+## 3      324-0054_attempters 6 SRP618695     Attempter            red
+## 4     324-0208_attempters 35 SRP618695     Attempter            red
+## 5    324-0201 _attempters 34 SRP618695     Attempter            red
+## 6 324-0197_non attempters 14 SRP618695 Non-attempter           blue
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggiNEXT}\NormalTok{(iNEXT\_data, }\AttributeTok{type =} \DecValTok{1}\NormalTok{, }\AttributeTok{facet.var =} \StringTok{"Order.q"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ iNEXT\_color\_df}\SpecialCharTok{$}\NormalTok{attempt\_colors) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ iNEXT\_color\_df}\SpecialCharTok{$}\NormalTok{attempt\_colors) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Effective Number of ASVs"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Number of Sequences"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
+## i Please use tidy evaluation idioms with `aes()`.
+## i See also `vignette("ggplot2-in-packages")` for more information.
+## i The deprecated feature was likely used in the iNEXT package.
+##   Please report the issue at <https://github.com/AnneChao/iNEXT/issues>.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+\end{verbatim}
+
+\begin{verbatim}
+## Scale for colour is already present.
+## Adding another scale for colour, which will replace the existing scale.
+## Scale for fill is already present.
+## Adding another scale for fill, which will replace the existing scale.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The shape palette can deal with a maximum of 6 discrete values because more
+## than 6 becomes difficult to discriminate
+## i you have requested 44 values. Consider specifying shapes manually if you need
+##   that many of them.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 114 rows containing missing values or values outside the scale range
+## (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iNEXT\_manual\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  iNEXT\_data}\SpecialCharTok{$}\NormalTok{iNextEst}\SpecialCharTok{$}\NormalTok{size\_based }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{names =}\NormalTok{ Assemblage) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(metadata\_df, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"names"} \OtherTok{=} \StringTok{"Run"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{AttemptStatus =} \FunctionTok{ifelse}\NormalTok{(}
+      \FunctionTok{grepl}\NormalTok{(}\StringTok{"non attempters"}\NormalTok{, source\_material\_id),}
+      \StringTok{"Non{-}attempter"}\NormalTok{,}
+      \StringTok{"Attempter"}
+\NormalTok{    )}
+\NormalTok{  )}
+
+
+\FunctionTok{dim}\NormalTok{(iNEXT\_manual\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5280   47
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iNEXT\_manual\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \CommentTok{\# Filter out rows that are calculated with actual sequences (no extrapolated)}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Method }\SpecialCharTok{==} \StringTok{"Rarefaction"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \CommentTok{\# Now, let\textquotesingle{}s draw the plot! }
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ m, }\AttributeTok{y =}\NormalTok{ qD, }\AttributeTok{color =}\NormalTok{ AttemptStatus, }\AttributeTok{group =}\NormalTok{ names)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{facet\_grid}\NormalTok{(Order.q }\SpecialCharTok{\textasciitilde{}}\NormalTok{ AttemptStatus, }\AttributeTok{scales =} \StringTok{"free"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+    \StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+    \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}
+\NormalTok{  )) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Effective Number of ASVs"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Number of Sequences"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\hypertarget{interpretation-1}{%
+\subsubsection{Interpretation 1}\label{interpretation-1}}
+
+For the ggiNEXT and manual rarefaction curve plots, there should be
+enough sequences to analyze for q = 1 and q = 2, but not for q = 0
+because many curves in q = 0 are still increasing and have not fully
+plateaued. Because of that, valid conclusion can be drawn on species
+richness when q = 1 and q = 2, because the curves stabilize clearly.
+However, it is probably not valid to draw conclusion when q = 0, because
+some curves are still increasing.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{distinct\_metadata\_df }\OtherTok{\textless{}{-}}\NormalTok{ metadata\_df}
+\FunctionTok{shapiro.test}\NormalTok{(distinct\_metadata\_df}\SpecialCharTok{$}\NormalTok{AvgSpotLen)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Shapiro-Wilk normality test
+## 
+## data:  distinct_metadata_df$AvgSpotLen
+## W = 0.66801, p-value = 1.043e-08
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obs\_div\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  iNEXT\_manual\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Method }\SpecialCharTok{==} \StringTok{"Observed"}\NormalTok{)}
+\FunctionTok{glimpse}\NormalTok{(obs\_div\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 132
+## Columns: 47
+## $ names                          <chr> "SRR35320041", "SRR35320041", "SRR35320~
+## $ m                              <dbl> 565, 565, 565, 357, 357, 357, 170, 170,~
+## $ Method                         <chr> "Observed", "Observed", "Observed", "Ob~
+## $ Order.q                        <dbl> 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, ~
+## $ qD                             <dbl> 5.000000, 1.731578, 1.346254, 19.000000~
+## $ qD.LCL                         <dbl> 4.356621, 1.572431, 1.247650, 17.257721~
+## $ qD.UCL                         <dbl> 5.643379, 1.890725, 1.444857, 20.742279~
+## $ SC                             <dbl> 1.0000000, 1.0000000, 1.0000000, 1.0000~
+## $ SC.LCL                         <dbl> 0.9993157, 0.9993157, 0.9993157, 0.9927~
+## $ SC.UCL                         <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+## $ Assay.Type                     <chr> "AMPLICON", "AMPLICON", "AMPLICON", "AM~
+## $ AvgSpotLen                     <int> 600, 600, 600, 601, 601, 601, 601, 601,~
+## $ Bases                          <int> 42870559, 42870559, 42870559, 52869386,~
+## $ BioProject                     <chr> "PRJNA1321953", "PRJNA1321953", "PRJNA1~
+## $ BioSample                      <chr> "SAMN51231085", "SAMN51231085", "SAMN51~
+## $ BioSampleModel                 <chr> "MIMS.me,MIGS/MIMS/MIMARKS.human-gut", ~
+## $ Bytes                          <int> 27501260, 27501260, 27501260, 33837100,~
+## $ Center.Name                    <chr> "JOHNS HOPKINS", "JOHNS HOPKINS", "JOHN~
+## $ Collection_Date                <chr> "2020/2022", "2020/2022", "2020/2022", ~
+## $ collection_method              <chr> "rectal swab", "rectal swab", "rectal s~
+## $ Consent                        <chr> "public", "public", "public", "public",~
+## $ DATASTORE.filetype             <chr> "fastq,run.zq,sra", "fastq,run.zq,sra",~
+## $ DATASTORE.provider             <chr> "gs,ncbi,s3", "gs,ncbi,s3", "gs,ncbi,s3~
+## $ DATASTORE.region               <chr> "gs.us-east1,ncbi.public,s3.us-east-1",~
+## $ env_broad_scale                <chr> "human gut metagenome", "human gut meta~
+## $ env_local_scale                <chr> "rectum", "rectum", "rectum", "rectum",~
+## $ env_medium                     <chr> "rectalal mucosa & stool", "rectalal mu~
+## $ Experiment                     <chr> "SRX30421935", "SRX30421935", "SRX30421~
+## $ geo_loc_name_country           <chr> "USA", "USA", "USA", "USA", "USA", "USA~
+## $ geo_loc_name_country_continent <chr> "North America", "North America", "Nort~
+## $ geo_loc_name                   <chr> "USA: Baltimore\\, MD", "USA: Baltimore~
+## $ Host                           <chr> "Homo sapiens", "Homo sapiens", "Homo s~
+## $ Instrument                     <chr> "Illumina MiSeq", "Illumina MiSeq", "Il~
+## $ lat_lon                        <chr> "39.2905 N 76.6104 W", "39.2905 N 76.61~
+## $ Library.Name                   <chr> "AMP_324-0065", "AMP_324-0065", "AMP_32~
+## $ LibraryLayout                  <chr> "PAIRED", "PAIRED", "PAIRED", "PAIRED",~
+## $ LibrarySelection               <chr> "PCR", "PCR", "PCR", "PCR", "PCR", "PCR~
+## $ LibrarySource                  <chr> "METAGENOMIC", "METAGENOMIC", "METAGENO~
+## $ Organism                       <chr> "human gut metagenome", "human gut meta~
+## $ Platform                       <chr> "ILLUMINA", "ILLUMINA", "ILLUMINA", "IL~
+## $ ReleaseDate                    <chr> "2025-09-10T00:00:00Z", "2025-09-10T00:~
+## $ create_date                    <chr> "2025-09-10T09:57:00Z", "2025-09-10T09:~
+## $ version                        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
+## $ Sample.Name                    <chr> "324-0065", "324-0065", "324-0065", "32~
+## $ source_material_id             <chr> "324-0065_non attempters 2", "324-0065_~
+## $ SRA.Study                      <chr> "SRP618695", "SRP618695", "SRP618695", ~
+## $ AttemptStatus                  <chr> "Non-attempter", "Non-attempter", "Non-~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obs\_whole\_rich\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  obs\_div\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Order.q }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
+
+\FunctionTok{shapiro.test}\NormalTok{(obs\_whole\_rich\_df}\SpecialCharTok{$}\NormalTok{qD)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Shapiro-Wilk normality test
+## 
+## data:  obs_whole_rich_df$qD
+## W = 0.87347, p-value = 0.0001833
+\end{verbatim}
+
+\hypertarget{p-value-is-less-than-0.5-my-data-is-not-normal}{%
+\section{p-value is less than 0.5 \textgreater{} my data is not
+normal}\label{p-value-is-less-than-0.5-my-data-is-not-normal}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kw\_attempt\_rich }\OtherTok{\textless{}{-}} 
+\NormalTok{  obs\_whole\_rich\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kruskal\_test}\NormalTok{(qD }\SpecialCharTok{\textasciitilde{}}\NormalTok{ AttemptStatus)}
+
+\NormalTok{kw\_attempt\_rich}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 6
+##   .y.       n statistic    df     p method        
+## * <chr> <int>     <dbl> <int> <dbl> <chr>         
+## 1 qD       44      1.54     1 0.214 Kruskal-Wallis
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{attempt\_ggboxplot }\OtherTok{\textless{}{-}} 
+  \FunctionTok{ggboxplot}\NormalTok{(obs\_whole\_rich\_df, }\AttributeTok{x =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{y =} \StringTok{"qD"}\NormalTok{, }
+            \AttributeTok{color =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{,}
+            \AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+} 
+  \CommentTok{\# Add points}
+  \FunctionTok{geom\_jitter}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ AttemptStatus)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                                \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                               \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"\# of Total ASVs (Richness)"}\NormalTok{) }\SpecialCharTok{+} 
+  \CommentTok{\# Now, let\textquotesingle{}s add the KW results }
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{subtitle =} \FunctionTok{get\_test\_label}\NormalTok{(kw\_attempt\_rich, }\AttributeTok{detailed =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+        \AttributeTok{axis.title.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{30}\NormalTok{,}
+                                   \AttributeTok{hjust =} \DecValTok{1}\NormalTok{, }
+                                   \AttributeTok{vjust =} \DecValTok{1}\NormalTok{))}
+
+\CommentTok{\# Show the plot}
+\NormalTok{attempt\_ggboxplot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obs\_div\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ AttemptStatus, }\AttributeTok{y =}\NormalTok{ qD, }\AttributeTok{fill =}\NormalTok{ AttemptStatus, }
+             \AttributeTok{color =}\NormalTok{ AttemptStatus)) }\SpecialCharTok{+} 
+  \FunctionTok{facet\_wrap}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{Order.q, }\AttributeTok{scales =} \StringTok{"free\_y"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_jitter}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                                \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                               \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Effective Number of ASVs"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}
+        \AttributeTok{axis.title.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{30}\NormalTok{,}
+                                   \AttributeTok{hjust =} \DecValTok{1}\NormalTok{, }
+                                   \AttributeTok{vjust =} \DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# I use Wilcox instead of ANOVA, because my data is not normal.}
+
+\NormalTok{obs\_rich\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  obs\_div\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Order.q }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
+
+
+\NormalTok{wilcox\_attempt\_rich }\OtherTok{\textless{}{-}} 
+  \FunctionTok{wilcox\_test}\NormalTok{(qD }\SpecialCharTok{\textasciitilde{}}\NormalTok{ AttemptStatus, }\AttributeTok{data =}\NormalTok{ obs\_rich\_df, }\AttributeTok{alternative =} \StringTok{"greater"}\NormalTok{)}
+
+
+\NormalTok{wilcox\_attempt\_rich}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 7
+##   .y.   group1    group2           n1    n2 statistic     p
+## * <chr> <chr>     <chr>         <int> <int>     <dbl> <dbl>
+## 1 qD    Attempter Non-attempter    32    12       239  0.11
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obs\_shannon\_df }\OtherTok{\textless{}{-}}
+\NormalTok{  obs\_div\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Order.q }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
+
+\NormalTok{wilcox\_attempt\_shannon }\OtherTok{\textless{}{-}}
+  \FunctionTok{wilcox\_test}\NormalTok{(qD }\SpecialCharTok{\textasciitilde{}}\NormalTok{ AttemptStatus,}
+               \AttributeTok{data =}\NormalTok{ obs\_shannon\_df, }\AttributeTok{alternative =} \StringTok{"greater"}\NormalTok{)}
+
+\NormalTok{wilcox\_attempt\_shannon}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 7
+##   .y.   group1    group2           n1    n2 statistic     p
+## * <chr> <chr>     <chr>         <int> <int>     <dbl> <dbl>
+## 1 qD    Attempter Non-attempter    32    12       220 0.237
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obs\_simpson\_df }\OtherTok{\textless{}{-}}
+\NormalTok{  obs\_div\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Order.q }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)}
+
+\NormalTok{wilcox\_attempt\_simpson }\OtherTok{\textless{}{-}}
+  \FunctionTok{wilcox\_test}\NormalTok{(qD }\SpecialCharTok{\textasciitilde{}}\NormalTok{ AttemptStatus,}
+               \AttributeTok{data =}\NormalTok{ obs\_simpson\_df, }\AttributeTok{alternative =} \StringTok{"greater"}\NormalTok{)}
+
+\NormalTok{wilcox\_attempt\_simpson}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 7
+##   .y.   group1    group2           n1    n2 statistic     p
+## * <chr> <chr>     <chr>         <int> <int>     <dbl> <dbl>
+## 1 qD    Attempter Non-attempter    32    12       198 0.443
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obs\_simps\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  obs\_div\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(Order.q }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)}
+\NormalTok{obs\_simps\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          names    m   Method Order.q       qD   qD.LCL    qD.UCL        SC
+## 1  SRR35320041  565 Observed       2 1.346254 1.247650  1.444857 1.0000000
+## 2  SRR35320051  357 Observed       2 2.767442 2.379562  3.155322 1.0000000
+## 3  SRR35320062  170 Observed       2 5.047153 3.963242  6.131065 1.0000000
+## 4  SRR35320072  366 Observed       2 7.135947 6.476075  7.795819 0.9972826
+## 5  SRR35320074  240 Observed       2 1.902371 1.626013  2.178730 1.0000000
+## 6  SRR35320075  271 Observed       2 3.045954 2.416283  3.675626 1.0000000
+## 7  SRR35320076  805 Observed       2 3.128545 2.936395  3.320696 1.0000000
+## 8  SRR35320077  357 Observed       2 6.512135 5.969098  7.055173 0.9972604
+## 9  SRR35320079 1830 Observed       2 1.764862 1.710963  1.818761 1.0000000
+## 10 SRR35320080  539 Observed       2 2.559228 2.266079  2.852377 1.0000000
+## 11 SRR35320082 1292 Observed       2 1.270821 1.221353  1.320289 1.0000000
+## 12 SRR35320084  293 Observed       2 5.095803 4.477178  5.714429 1.0000000
+## 13 SRR35320085 1003 Observed       2 5.650434 5.254223  6.046646 1.0000000
+## 14 SRR35320086  311 Observed       2 3.262421 2.960228  3.564614 1.0000000
+## 15 SRR35320087 1958 Observed       2 1.380689 1.328235  1.433143 1.0000000
+## 16 SRR35320088 1994 Observed       2 3.082007 2.923790  3.240224 1.0000000
+## 17 SRR35320089  885 Observed       2 1.514201 1.425796  1.602606 1.0000000
+## 18 SRR35320090 1055 Observed       2 1.567144 1.489135  1.645154 0.9990575
+## 19 SRR35320091  432 Observed       2 6.259610 5.465499  7.053720 0.9977170
+## 20 SRR35320092  178 Observed       2 2.740830 2.401723  3.079938 1.0000000
+## 21 SRR35320093  817 Observed       2 1.022318 1.006765  1.037872 1.0000000
+## 22 SRR35320094  361 Observed       2 2.196138 1.897523  2.494752 0.9972452
+## 23 SRR35320095 3498 Observed       2 6.640864 6.329993  6.951735 1.0000000
+## 24 SRR35320100  976 Observed       2 9.840051 9.259275 10.420827 1.0000000
+## 25 SRR35320110  604 Observed       2 1.090937 1.056040  1.125834 1.0000000
+## 26 SRR35320111 1114 Observed       2 2.502735 2.370910  2.634559 1.0000000
+## 27 SRR35320112 1197 Observed       2 3.114822 2.928632  3.301013 1.0000000
+## 28 SRR35320113 1047 Observed       2 3.813922 3.634271  3.993574 1.0000000
+## 29 SRR35320114  893 Observed       2 3.406315 3.186400  3.626230 1.0000000
+## 30 SRR35320115  342 Observed       2 3.359876 3.087781  3.631971 1.0000000
+## 31 SRR35320116  798 Observed       2 2.036756 1.909912  2.163600 1.0000000
+## 32 SRR35320117  443 Observed       2 7.009143 6.528032  7.490254 0.9977729
+## 33 SRR35320118  181 Observed       2 3.257532 2.624450  3.890614 1.0000000
+## 34 SRR35320119 3475 Observed       2 2.932521 2.871470  2.993571 0.9994256
+## 35 SRR35320120 3168 Observed       2 4.319695 4.113084  4.526306 0.9990546
+## 36 SRR35320121  610 Observed       2 2.045000 1.855383  2.234617 0.9983714
+## 37 SRR35320122  301 Observed       2 3.904038 3.365894  4.442181 0.9967215
+## 38 SRR35320123  335 Observed       2 2.406248 2.084278  2.728218 1.0000000
+## 39 SRR35320125 2138 Observed       2 1.445605 1.405839  1.485371 0.9976618
+## 40 SRR35320126  658 Observed       2 1.358191 1.281068  1.435313 0.9984940
+## 41 SRR35320128 1590 Observed       2 2.761201 2.585801  2.936600 0.9993766
+## 42 SRR35320139  367 Observed       2 2.003853 1.810983  2.196723 1.0000000
+## 43 SRR35320140 1845 Observed       2 4.545166 4.220344  4.869989 1.0000000
+## 44 SRR35320141  423 Observed       2 3.433481 3.133349  3.733613 1.0000000
+##       SC.LCL    SC.UCL Assay.Type AvgSpotLen    Bases   BioProject    BioSample
+## 1  0.9993157 1.0000000   AMPLICON        600 42870559 PRJNA1321953 SAMN51231085
+## 2  0.9927212 1.0000000   AMPLICON        601 52869386 PRJNA1321953 SAMN51231084
+## 3  0.9870731 1.0000000   AMPLICON        601 48220175 PRJNA1321953 SAMN51231083
+## 4  0.9902151 1.0000000   AMPLICON        600 27932952 PRJNA1321953 SAMN51231126
+## 5  0.9927686 1.0000000   AMPLICON        600 30216971 PRJNA1321953 SAMN51231124
+## 6  0.9980326 1.0000000   AMPLICON        601 21387436 PRJNA1321953 SAMN51231123
+## 7  0.9976705 1.0000000   AMPLICON        600 26428722 PRJNA1321953 SAMN51231122
+## 8  0.9898529 1.0000000   AMPLICON        600 27191972 PRJNA1321953 SAMN51231121
+## 9  0.9990958 1.0000000   AMPLICON        600 27582655 PRJNA1321953 SAMN51231119
+## 10 0.9958421 1.0000000   AMPLICON        600 31526496 PRJNA1321953 SAMN51231106
+## 11 0.9997004 1.0000000   AMPLICON        600 23856070 PRJNA1321953 SAMN51231117
+## 12 0.9908092 1.0000000   AMPLICON        600 31436524 PRJNA1321953 SAMN51231109
+## 13 0.9989389 1.0000000   AMPLICON        600 30019709 PRJNA1321953 SAMN51231110
+## 14 1.0000000 1.0000000   AMPLICON        601 22421035 PRJNA1321953 SAMN51231111
+## 15 0.9993333 1.0000000   AMPLICON        600 29898013 PRJNA1321953 SAMN51231112
+## 16 0.9990857 1.0000000   AMPLICON        598 24587995 PRJNA1321953 SAMN51231113
+## 17 0.9982565 1.0000000   AMPLICON        600 28691764 PRJNA1321953 SAMN51231114
+## 18 0.9970811 1.0000000   AMPLICON        601 27029497 PRJNA1321953 SAMN51231115
+## 19 0.9922760 1.0000000   AMPLICON        600 31827759 PRJNA1321953 SAMN51231116
+## 20 0.9950810 1.0000000   AMPLICON        601 43719025 PRJNA1321953 SAMN51231081
+## 21 1.0000000 1.0000000   AMPLICON        600 23536717 PRJNA1321953 SAMN51231095
+## 22 0.9920025 1.0000000   AMPLICON        601 27966184 PRJNA1321953 SAMN51231096
+## 23 0.9992399 1.0000000   AMPLICON        600 37675072 PRJNA1321953 SAMN51231079
+## 24 0.9979723 1.0000000   AMPLICON        600 53610235 PRJNA1321953 SAMN51231086
+## 25 0.9981475 1.0000000   AMPLICON        600 25163718 PRJNA1321953 SAMN51231097
+## 26 0.9978138 1.0000000   AMPLICON        600 36565624 PRJNA1321953 SAMN51231098
+## 27 0.9981115 1.0000000   AMPLICON        600 37500250 PRJNA1321953 SAMN51231099
+## 28 0.9982062 1.0000000   AMPLICON        600 33211193 PRJNA1321953 SAMN51231100
+## 29 0.9978908 1.0000000   AMPLICON        600 47077172 PRJNA1321953 SAMN51231101
+## 30 0.9991943 1.0000000   AMPLICON        601 34126997 PRJNA1321953 SAMN51231102
+## 31 0.9988916 1.0000000   AMPLICON        600 34440359 PRJNA1321953 SAMN51231103
+## 32 0.9931284 1.0000000   AMPLICON        600 33302037 PRJNA1321953 SAMN51231104
+## 33 0.9970651 1.0000000   AMPLICON        601 20473521 PRJNA1321953 SAMN51231105
+## 34 0.9986361 1.0000000   AMPLICON        600 35778012 PRJNA1321953 SAMN51231080
+## 35 0.9979793 1.0000000   AMPLICON        600 36178456 PRJNA1321953 SAMN51231107
+## 36 0.9946403 1.0000000   AMPLICON        601 22590595 PRJNA1321953 SAMN51231094
+## 37 0.9897014 1.0000000   AMPLICON        600 24556540 PRJNA1321953 SAMN51231093
+## 38 0.9978853 1.0000000   AMPLICON        600 23270949 PRJNA1321953 SAMN51231092
+## 39 0.9959561 0.9993675   AMPLICON        600 51888856 PRJNA1321953 SAMN51231090
+## 40 0.9955220 1.0000000   AMPLICON        601 46074334 PRJNA1321953 SAMN51231089
+## 41 0.9968977 1.0000000   AMPLICON        599 46115105 PRJNA1321953 SAMN51231088
+## 42 0.9976761 1.0000000   AMPLICON        600 42955872 PRJNA1321953 SAMN51231087
+## 43 0.9982956 1.0000000   AMPLICON        600 46614828 PRJNA1321953 SAMN51231078
+## 44 0.9964821 1.0000000   AMPLICON        600 28226814 PRJNA1321953 SAMN51231077
+##                         BioSampleModel    Bytes   Center.Name Collection_Date
+## 1  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 27501260 JOHNS HOPKINS       2020/2022
+## 2  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 33837100 JOHNS HOPKINS       2020/2022
+## 3  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 30319981 JOHNS HOPKINS       2020/2022
+## 4  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 17133688 JOHNS HOPKINS       2020/2022
+## 5  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 18501507 JOHNS HOPKINS       2020/2022
+## 6  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 13196458 JOHNS HOPKINS       2020/2022
+## 7  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 16153357 JOHNS HOPKINS       2020/2022
+## 8  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 16641297 JOHNS HOPKINS       2020/2022
+## 9  MIMS.me,MIGS/MIMS/MIMARKS.human-gut 16885180 JOHNS HOPKINS       2020/2022
+## 10 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 20222807 JOHNS HOPKINS       2020/2022
+## 11 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 14475856 JOHNS HOPKINS       2020/2022
+## 12 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 19279261 JOHNS HOPKINS       2020/2022
+## 13 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 18148482 JOHNS HOPKINS       2020/2022
+## 14 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 13772851 JOHNS HOPKINS       2020/2022
+## 15 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 18044259 JOHNS HOPKINS       2020/2022
+## 16 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 14830443 JOHNS HOPKINS       2020/2022
+## 17 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 17517390 JOHNS HOPKINS       2020/2022
+## 18 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 16443862 JOHNS HOPKINS       2020/2022
+## 19 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 19568764 JOHNS HOPKINS       2020/2022
+## 20 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 27426176 JOHNS HOPKINS       2020/2022
+## 21 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 15013545 JOHNS HOPKINS       2020/2022
+## 22 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 17869367 JOHNS HOPKINS       2020/2022
+## 23 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 24115492 JOHNS HOPKINS       2020/2022
+## 24 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 34104427 JOHNS HOPKINS       2020/2022
+## 25 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 16173279 JOHNS HOPKINS       2020/2022
+## 26 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 23718823 JOHNS HOPKINS       2020/2022
+## 27 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 24200072 JOHNS HOPKINS       2020/2022
+## 28 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 21285144 JOHNS HOPKINS       2020/2022
+## 29 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 30120760 JOHNS HOPKINS       2020/2022
+## 30 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 21790069 JOHNS HOPKINS       2020/2022
+## 31 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 22126635 JOHNS HOPKINS       2020/2022
+## 32 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 21567525 JOHNS HOPKINS       2020/2022
+## 33 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 13141754 JOHNS HOPKINS       2020/2022
+## 34 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 23122775 JOHNS HOPKINS       2020/2022
+## 35 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 23020058 JOHNS HOPKINS       2020/2022
+## 36 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 14451193 JOHNS HOPKINS       2020/2022
+## 37 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 15690380 JOHNS HOPKINS       2020/2022
+## 38 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 14836433 JOHNS HOPKINS       2020/2022
+## 39 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 32984113 JOHNS HOPKINS       2020/2022
+## 40 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 29267880 JOHNS HOPKINS       2020/2022
+## 41 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 29241217 JOHNS HOPKINS       2020/2022
+## 42 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 26953031 JOHNS HOPKINS       2020/2022
+## 43 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 29604198 JOHNS HOPKINS       2020/2022
+## 44 MIMS.me,MIGS/MIMS/MIMARKS.human-gut 17870700 JOHNS HOPKINS       2020/2022
+##    collection_method Consent DATASTORE.filetype DATASTORE.provider
+## 1        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 2        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 3        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 4        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 5        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 6        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 7        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 8        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 9        rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 10       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 11       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 12       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 13       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 14       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 15       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 16       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 17       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 18       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 19       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 20       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 21       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 22       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 23       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 24       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 25       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 26       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 27       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 28       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 29       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 30       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 31       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 32       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 33       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 34       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 35       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 36       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 37       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 38       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 39       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 40       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 41       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 42       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 43       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+## 44       rectal swab  public   fastq,run.zq,sra         gs,ncbi,s3
+##                        DATASTORE.region      env_broad_scale env_local_scale
+## 1  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 2  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 3  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 4  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 5  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 6  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 7  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 8  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 9  gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 10 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 11 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 12 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 13 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 14 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 15 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 16 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 17 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 18 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 19 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 20 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 21 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 22 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 23 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 24 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 25 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 26 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 27 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 28 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 29 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 30 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 31 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 32 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 33 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 34 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 35 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 36 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 37 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 38 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 39 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 40 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 41 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 42 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 43 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+## 44 gs.us-east1,ncbi.public,s3.us-east-1 human gut metagenome          rectum
+##                 env_medium  Experiment geo_loc_name_country
+## 1  rectalal mucosa & stool SRX30421935                  USA
+## 2  rectalal mucosa & stool SRX30421925                  USA
+## 3  rectalal mucosa & stool SRX30421914                  USA
+## 4  rectalal mucosa & stool SRX30421904                  USA
+## 5  rectalal mucosa & stool SRX30421902                  USA
+## 6  rectalal mucosa & stool SRX30421901                  USA
+## 7  rectalal mucosa & stool SRX30421900                  USA
+## 8  rectalal mucosa & stool SRX30421899                  USA
+## 9  rectalal mucosa & stool SRX30421897                  USA
+## 10 rectalal mucosa & stool SRX30421896                  USA
+## 11 rectalal mucosa & stool SRX30421894                  USA
+## 12 rectalal mucosa & stool SRX30421892                  USA
+## 13 rectalal mucosa & stool SRX30421891                  USA
+## 14 rectalal mucosa & stool SRX30421890                  USA
+## 15 rectalal mucosa & stool SRX30421889                  USA
+## 16 rectalal mucosa & stool SRX30421888                  USA
+## 17 rectalal mucosa & stool SRX30421887                  USA
+## 18 rectalal mucosa & stool SRX30421886                  USA
+## 19 rectalal mucosa & stool SRX30421885                  USA
+## 20 rectalal mucosa & stool SRX30421884                  USA
+## 21 rectalal mucosa & stool SRX30421883                  USA
+## 22 rectalal mucosa & stool SRX30421882                  USA
+## 23 rectalal mucosa & stool SRX30421881                  USA
+## 24 rectalal mucosa & stool SRX30421876                  USA
+## 25 rectalal mucosa & stool SRX30421866                  USA
+## 26 rectalal mucosa & stool SRX30421865                  USA
+## 27 rectalal mucosa & stool SRX30421864                  USA
+## 28 rectalal mucosa & stool SRX30421863                  USA
+## 29 rectalal mucosa & stool SRX30421862                  USA
+## 30 rectalal mucosa & stool SRX30421861                  USA
+## 31 rectalal mucosa & stool SRX30421860                  USA
+## 32 rectalal mucosa & stool SRX30421859                  USA
+## 33 rectalal mucosa & stool SRX30421858                  USA
+## 34 rectalal mucosa & stool SRX30421857                  USA
+## 35 rectalal mucosa & stool SRX30421856                  USA
+## 36 rectalal mucosa & stool SRX30421855                  USA
+## 37 rectalal mucosa & stool SRX30421854                  USA
+## 38 rectalal mucosa & stool SRX30421853                  USA
+## 39 rectalal mucosa & stool SRX30421851                  USA
+## 40 rectalal mucosa & stool SRX30421850                  USA
+## 41 rectalal mucosa & stool SRX30421848                  USA
+## 42 rectalal mucosa & stool SRX30421837                  USA
+## 43 rectalal mucosa & stool SRX30421836                  USA
+## 44 rectalal mucosa & stool SRX30421835                  USA
+##    geo_loc_name_country_continent         geo_loc_name         Host
+## 1                   North America USA: Baltimore\\, MD Homo sapiens
+## 2                   North America USA: Baltimore\\, MD Homo sapiens
+## 3                   North America USA: Baltimore\\, MD Homo sapiens
+## 4                   North America USA: Baltimore\\, MD Homo sapiens
+## 5                   North America USA: Baltimore\\, MD Homo sapiens
+## 6                   North America USA: Baltimore\\, MD Homo sapiens
+## 7                   North America USA: Baltimore\\, MD Homo sapiens
+## 8                   North America USA: Baltimore\\, MD Homo sapiens
+## 9                   North America USA: Baltimore\\, MD Homo sapiens
+## 10                  North America USA: Baltimore\\, MD Homo sapiens
+## 11                  North America USA: Baltimore\\, MD Homo sapiens
+## 12                  North America USA: Baltimore\\, MD Homo sapiens
+## 13                  North America USA: Baltimore\\, MD Homo sapiens
+## 14                  North America USA: Baltimore\\, MD Homo sapiens
+## 15                  North America USA: Baltimore\\, MD Homo sapiens
+## 16                  North America USA: Baltimore\\, MD Homo sapiens
+## 17                  North America USA: Baltimore\\, MD Homo sapiens
+## 18                  North America USA: Baltimore\\, MD Homo sapiens
+## 19                  North America USA: Baltimore\\, MD Homo sapiens
+## 20                  North America USA: Baltimore\\, MD Homo sapiens
+## 21                  North America USA: Baltimore\\, MD Homo sapiens
+## 22                  North America USA: Baltimore\\, MD Homo sapiens
+## 23                  North America USA: Baltimore\\, MD Homo sapiens
+## 24                  North America USA: Baltimore\\, MD Homo sapiens
+## 25                  North America USA: Baltimore\\, MD Homo sapiens
+## 26                  North America USA: Baltimore\\, MD Homo sapiens
+## 27                  North America USA: Baltimore\\, MD Homo sapiens
+## 28                  North America USA: Baltimore\\, MD Homo sapiens
+## 29                  North America USA: Baltimore\\, MD Homo sapiens
+## 30                  North America USA: Baltimore\\, MD Homo sapiens
+## 31                  North America USA: Baltimore\\, MD Homo sapiens
+## 32                  North America USA: Baltimore\\, MD Homo sapiens
+## 33                  North America USA: Baltimore\\, MD Homo sapiens
+## 34                  North America USA: Baltimore\\, MD Homo sapiens
+## 35                  North America USA: Baltimore\\, MD Homo sapiens
+## 36                  North America USA: Baltimore\\, MD Homo sapiens
+## 37                  North America USA: Baltimore\\, MD Homo sapiens
+## 38                  North America USA: Baltimore\\, MD Homo sapiens
+## 39                  North America USA: Baltimore\\, MD Homo sapiens
+## 40                  North America USA: Baltimore\\, MD Homo sapiens
+## 41                  North America USA: Baltimore\\, MD Homo sapiens
+## 42                  North America USA: Baltimore\\, MD Homo sapiens
+## 43                  North America USA: Baltimore\\, MD Homo sapiens
+## 44                  North America USA: Baltimore\\, MD Homo sapiens
+##        Instrument             lat_lon Library.Name LibraryLayout
+## 1  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0065        PAIRED
+## 2  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0059        PAIRED
+## 3  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0054        PAIRED
+## 4  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0208        PAIRED
+## 5  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0201        PAIRED
+## 6  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0197        PAIRED
+## 7  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0196        PAIRED
+## 8  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0193        PAIRED
+## 9  Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0189        PAIRED
+## 10 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0131        PAIRED
+## 11 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0178        PAIRED
+## 12 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0145        PAIRED
+## 13 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0146        PAIRED
+## 14 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0147        PAIRED
+## 15 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0152        PAIRED
+## 16 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0158        PAIRED
+## 17 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0165        PAIRED
+## 18 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0167        PAIRED
+## 19 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0168        PAIRED
+## 20 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0047        PAIRED
+## 21 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0093        PAIRED
+## 22 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0094        PAIRED
+## 23 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0042        PAIRED
+## 24 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0066        PAIRED
+## 25 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0097        PAIRED
+## 26 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0102        PAIRED
+## 27 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0105        PAIRED
+## 28 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0108        PAIRED
+## 29 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0111        PAIRED
+## 30 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0116        PAIRED
+## 31 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0118        PAIRED
+## 32 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0120        PAIRED
+## 33 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0125        PAIRED
+## 34 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0043        PAIRED
+## 35 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0134        PAIRED
+## 36 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0089        PAIRED
+## 37 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0088        PAIRED
+## 38 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0086        PAIRED
+## 39 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0076        PAIRED
+## 40 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0074        PAIRED
+## 41 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0073        PAIRED
+## 42 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0072        PAIRED
+## 43 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0017        PAIRED
+## 44 Illumina MiSeq 39.2905 N 76.6104 W AMP_324-0001        PAIRED
+##    LibrarySelection LibrarySource             Organism Platform
+## 1               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 2               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 3               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 4               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 5               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 6               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 7               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 8               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 9               PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 10              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 11              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 12              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 13              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 14              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 15              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 16              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 17              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 18              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 19              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 20              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 21              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 22              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 23              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 24              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 25              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 26              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 27              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 28              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 29              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 30              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 31              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 32              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 33              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 34              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 35              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 36              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 37              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 38              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 39              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 40              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 41              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 42              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 43              PCR   METAGENOMIC human gut metagenome ILLUMINA
+## 44              PCR   METAGENOMIC human gut metagenome ILLUMINA
+##             ReleaseDate          create_date version Sample.Name
+## 1  2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0065
+## 2  2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0059
+## 3  2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0054
+## 4  2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0208
+## 5  2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0201
+## 6  2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0197
+## 7  2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0196
+## 8  2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0193
+## 9  2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0189
+## 10 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0131
+## 11 2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0178
+## 12 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0145
+## 13 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0146
+## 14 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0147
+## 15 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0152
+## 16 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0158
+## 17 2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0165
+## 18 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0167
+## 19 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0168
+## 20 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0047
+## 21 2025-09-10T00:00:00Z 2025-09-10T09:57:00Z       1    324-0093
+## 22 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0094
+## 23 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0042
+## 24 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0066
+## 25 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0097
+## 26 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0102
+## 27 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0105
+## 28 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0108
+## 29 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0111
+## 30 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0116
+## 31 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0118
+## 32 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0120
+## 33 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0125
+## 34 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0043
+## 35 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0134
+## 36 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0089
+## 37 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0088
+## 38 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0086
+## 39 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0076
+## 40 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0074
+## 41 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0073
+## 42 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0072
+## 43 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0017
+## 44 2025-09-10T00:00:00Z 2025-09-10T09:58:00Z       1    324-0001
+##            source_material_id SRA.Study AttemptStatus
+## 1   324-0065_non attempters 2 SRP618695 Non-attempter
+## 2       324-0059_attempters 7 SRP618695     Attempter
+## 3       324-0054_attempters 6 SRP618695     Attempter
+## 4      324-0208_attempters 35 SRP618695     Attempter
+## 5     324-0201 _attempters 34 SRP618695     Attempter
+## 6  324-0197_non attempters 14 SRP618695 Non-attempter
+## 7      324-0196_attempters 33 SRP618695     Attempter
+## 8      324-0193_attempters 32 SRP618695     Attempter
+## 9      324-0189_attempters 30 SRP618695     Attempter
+## 10     324-0131_attempters 23 SRP618695     Attempter
+## 11 324-0178_non attempters 12 SRP618695 Non-attempter
+## 12     324-0145_attempters 24 SRP618695     Attempter
+## 13     324-0146_attempters 25 SRP618695     Attempter
+## 14 324-0147_non attempters 10 SRP618695 Non-attempter
+## 15     324-0152_attempters 26 SRP618695     Attempter
+## 16     324-0158_attempters 27 SRP618695     Attempter
+## 17     324-0165_attempters 28 SRP618695     Attempter
+## 18 324-0167_non attempters 11 SRP618695 Non-attempter
+## 19     324-0168_attempters 29 SRP618695     Attempter
+## 20      324-0047_attempters 4 SRP618695     Attempter
+## 21     324-0093_attempters 16 SRP618695     Attempter
+## 22      324-0094_attempters17 SRP618695     Attempter
+## 23      324-0042_attempters 2 SRP618695     Attempter
+## 24      324-0066_attempters 8 SRP618695     Attempter
+## 25     324-0097_attempters 18 SRP618695     Attempter
+## 26      324-0102_attempters19 SRP618695     Attempter
+## 27  324-0105_non attempters 4 SRP618695 Non-attempter
+## 28  324-0108_non attempters 5 SRP618695 Non-attempter
+## 29     324-0111_attempters 20 SRP618695     Attempter
+## 30  324-0116_non attempters 6 SRP618695 Non-attempter
+## 31  324-0118_non attempters 7 SRP618695 Non-attempter
+## 32     324-0120_attempters 21 SRP618695     Attempter
+## 33     324-0125_attempters 22 SRP618695     Attempter
+## 34      324-0043_attempters 3 SRP618695     Attempter
+## 35  324-0134_non attempters 8 SRP618695 Non-attempter
+## 36    324-0089 _attempters 15 SRP618695     Attempter
+## 37  324-0088_non attempters 3 SRP618695 Non-attempter
+## 38     324-0086_attempters 14 SRP618695     Attempter
+## 39     324-0076_attempters 12 SRP618695     Attempter
+## 40     324-0074_attempters 11 SRP618695     Attempter
+## 41     324-0073_attempters 10 SRP618695     Attempter
+## 42      324-0072_attempters 9 SRP618695     Attempter
+## 43      324-0017_attempters 1 SRP618695     Attempter
+## 44  324-0001_non attempters 1 SRP618695 Non-attempter
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Rich }
+\NormalTok{rich\_ggboxplot }\OtherTok{\textless{}{-}} 
+  \FunctionTok{ggboxplot}\NormalTok{(obs\_rich\_df, }\AttributeTok{x =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{y =} \StringTok{"qD"}\NormalTok{, }
+            \AttributeTok{color =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{,}
+            \AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+} 
+ 
+  \FunctionTok{geom\_jitter}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ AttemptStatus)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                                \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                               \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"\# of Total ASVs (Richness)"}\NormalTok{) }\SpecialCharTok{+} 
+  \CommentTok{\# Add Wilcoxon}
+  \FunctionTok{stat\_compare\_means}\NormalTok{(}\AttributeTok{method =} \StringTok{"wilcox.test"}\NormalTok{, }\AttributeTok{label.y =} \FunctionTok{min}\NormalTok{(obs\_rich\_df}\SpecialCharTok{$}\NormalTok{qD) }\SpecialCharTok{{-}} \DecValTok{5}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+        \AttributeTok{axis.title.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{30}\NormalTok{,}
+                                   \AttributeTok{hjust =} \DecValTok{1}\NormalTok{, }
+                                   \AttributeTok{vjust =} \DecValTok{1}\NormalTok{))}
+
+\NormalTok{rich\_ggboxplot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Simpson by AttemptStatus }
+\NormalTok{simps\_ggboxplot }\OtherTok{\textless{}{-}} 
+  \FunctionTok{ggboxplot}\NormalTok{(obs\_simps\_df, }\AttributeTok{x =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{y =} \StringTok{"qD"}\NormalTok{, }
+            \AttributeTok{color =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"AttemptStatus"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{,}
+            \AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{+} 
+
+
+  \FunctionTok{geom\_jitter}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ AttemptStatus)) }\SpecialCharTok{+} 
+
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                                \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Attempter"} \OtherTok{=} \StringTok{"red"}\NormalTok{,}
+                               \StringTok{"Non{-}attempter"} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+} 
+
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"\# of Dominant ASVs (Simpson)"}\NormalTok{) }\SpecialCharTok{+}
+
+  \CommentTok{\# Add Wilcoxon}
+  \FunctionTok{stat\_compare\_means}\NormalTok{(}\AttributeTok{method =} \StringTok{"wilcox.test"}\NormalTok{,}
+                     \AttributeTok{label.y =} \FunctionTok{min}\NormalTok{(obs\_simps\_df}\SpecialCharTok{$}\NormalTok{qD) }\SpecialCharTok{{-}} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+} 
+
+  \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+        \AttributeTok{axis.title.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{30}\NormalTok{,}
+                                   \AttributeTok{hjust =} \DecValTok{1}\NormalTok{,}
+                                   \AttributeTok{vjust =} \DecValTok{1}\NormalTok{))}
+
+\NormalTok{simps\_ggboxplot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rich\_ggboxplot }\SpecialCharTok{+}\NormalTok{ simps\_ggboxplot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{04_Biodiversity_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\hypertarget{interpretation-2}{%
+\subsubsection{Interpretation 2}\label{interpretation-2}}
+
+Wilcoxon rank-sum tests using a one-sided alternative hypothesis showed
+no significant differences in alpha diversity between suicide attempters
+and non-attempters across all diversity levels. When q = 0, p value is
+0.11. When q = 1, p value is 0.237. When q = 2, p value is 0.443.
+Overall, these results fail to reject the null hypothesis and indicate
+that hospitalized MDD patients with recent suicide attempts do not
+exhibit significantly higher gut microbial alpha diversity compared to
+those without a history of suicide attempts.
+
+\hypertarget{interpretation-3}{%
+\subsubsection{Interpretation 3}\label{interpretation-3}}
+
+I statistically tested my scientific question using Wilcoxon rank-sum
+tests to compare alpha diversity between suicide attempters and
+non-attempters. I used this test because my variable of interest,
+Attempt Status, is categorical, and my alpha diversity data were not
+normally distributed, making a non-parametric test more appropriate than
+ANOVA. I conducted separate one-sided Wilcoxon tests for richness (q =
+0), Shannon diversity (q = 1), and Simpson diversity (q = 2), using an
+alternative hypothesis that alpha diversity would be greater in
+attempters compared to non-attempters. This allowed me to statistically
+evaluate whether gut microbial diversity differed between groups across
+all ASVs, common ASVs, and dominant ASVs.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{end\_time }\OtherTok{\textless{}{-}} \FunctionTok{Sys.time}\NormalTok{()}
+\NormalTok{end\_time }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "2026-04-19 14:51:02 EDT"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{elapsed\_time }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{((end\_time }\SpecialCharTok{{-}}\NormalTok{ start\_time), }\DecValTok{3}\NormalTok{)}
+\NormalTok{elapsed\_time}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Time difference of 1.421 mins
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools}\SpecialCharTok{::}\FunctionTok{session\_info}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## - Session info ---------------------------------------------------------------
+##  setting  value
+##  version  R version 4.2.3 (2023-03-15)
+##  os       Rocky Linux 9.5 (Blue Onyx)
+##  system   x86_64, linux-gnu
+##  ui       X11
+##  language (EN)
+##  collate  en_US.UTF-8
+##  ctype    en_US.UTF-8
+##  tz       America/New_York
+##  date     2026-04-19
+##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
+## 
+## - Packages -------------------------------------------------------------------
+##  package          * version   date (UTC) lib source
+##  abind              1.4-8     2024-09-12 [2] CRAN (R 4.2.3)
+##  ade4               1.7-23    2025-02-14 [2] CRAN (R 4.2.3)
+##  ape                5.8-1     2024-12-16 [2] CRAN (R 4.2.3)
+##  backports          1.5.0     2024-05-23 [2] CRAN (R 4.2.3)
+##  Biobase            2.58.0    2022-11-01 [2] Bioconductor
+##  BiocGenerics       0.44.0    2022-11-01 [2] Bioconductor
+##  biomformat         1.26.0    2022-11-01 [2] Bioconductor
+##  Biostrings         2.66.0    2022-11-01 [2] Bioconductor
+##  bitops             1.0-9     2024-10-03 [2] CRAN (R 4.2.3)
+##  broom              1.0.11    2025-12-04 [2] CRAN (R 4.2.3)
+##  cachem             1.1.0     2024-05-16 [2] CRAN (R 4.2.3)
+##  car                3.1-5     2026-02-03 [2] CRAN (R 4.2.3)
+##  carData            3.0-6     2026-01-30 [2] CRAN (R 4.2.3)
+##  cli                3.6.5     2025-04-23 [2] CRAN (R 4.2.3)
+##  cluster            2.1.4     2022-08-22 [2] CRAN (R 4.2.3)
+##  codetools          0.2-19    2023-02-01 [2] CRAN (R 4.2.3)
+##  colorspace         2.1-1     2024-07-26 [2] CRAN (R 4.2.3)
+##  crayon             1.5.3     2024-06-20 [2] CRAN (R 4.2.3)
+##  data.table         1.16.2    2024-10-10 [2] CRAN (R 4.2.3)
+##  devtools         * 2.4.5     2022-10-11 [2] CRAN (R 4.2.3)
+##  digest             0.6.37    2024-08-19 [2] CRAN (R 4.2.3)
+##  dplyr            * 1.1.4     2023-11-17 [2] CRAN (R 4.2.3)
+##  ellipsis           0.3.2     2021-04-29 [2] CRAN (R 4.2.3)
+##  evaluate           1.0.1     2024-10-10 [2] CRAN (R 4.2.3)
+##  fansi              1.0.6     2023-12-08 [2] CRAN (R 4.2.3)
+##  farver             2.1.2     2024-05-13 [2] CRAN (R 4.2.3)
+##  fastmap            1.2.0     2024-05-15 [2] CRAN (R 4.2.3)
+##  forcats          * 1.0.0     2023-01-29 [2] CRAN (R 4.2.3)
+##  foreach            1.5.2     2022-02-02 [2] CRAN (R 4.2.3)
+##  Formula            1.2-5     2023-02-24 [2] CRAN (R 4.2.3)
+##  fs                 1.6.5     2024-10-30 [2] CRAN (R 4.2.3)
+##  generics           0.1.3     2022-07-05 [2] CRAN (R 4.2.3)
+##  GenomeInfoDb       1.34.9    2023-02-02 [2] Bioconductor
+##  GenomeInfoDbData   1.2.9     2024-11-25 [2] Bioconductor
+##  ggplot2          * 4.0.2     2026-02-03 [2] CRAN (R 4.2.3)
+##  ggpubr           * 0.6.3     2026-02-24 [2] CRAN (R 4.2.3)
+##  ggsignif           0.6.4     2022-10-13 [2] CRAN (R 4.2.3)
+##  glue               1.8.0     2024-09-30 [2] CRAN (R 4.2.3)
+##  gtable             0.3.6     2024-10-25 [2] CRAN (R 4.2.3)
+##  hms                1.1.3     2023-03-21 [2] CRAN (R 4.2.3)
+##  htmltools          0.5.8.1   2024-04-04 [2] CRAN (R 4.2.3)
+##  htmlwidgets        1.6.4     2023-12-06 [2] CRAN (R 4.2.3)
+##  httpuv             1.6.15    2024-03-26 [2] CRAN (R 4.2.3)
+##  igraph             2.1.1     2024-10-19 [2] CRAN (R 4.2.3)
+##  iNEXT            * 3.0.2     2025-07-30 [2] CRAN (R 4.2.3)
+##  IRanges            2.32.0    2022-11-01 [2] Bioconductor
+##  iterators          1.0.14    2022-02-05 [2] CRAN (R 4.2.3)
+##  jsonlite           1.8.9     2024-09-20 [2] CRAN (R 4.2.3)
+##  knitr              1.49      2024-11-08 [2] CRAN (R 4.2.3)
+##  labeling           0.4.3     2023-08-29 [2] CRAN (R 4.2.3)
+##  later              1.3.2     2023-12-06 [2] CRAN (R 4.2.3)
+##  lattice            0.20-45   2021-09-22 [2] CRAN (R 4.2.3)
+##  lifecycle          1.0.4     2023-11-07 [2] CRAN (R 4.2.3)
+##  lubridate        * 1.9.3     2023-09-27 [2] CRAN (R 4.2.3)
+##  magrittr           2.0.3     2022-03-30 [2] CRAN (R 4.2.3)
+##  MASS               7.3-58.2  2023-01-23 [2] CRAN (R 4.2.3)
+##  Matrix             1.6-4     2023-11-30 [2] CRAN (R 4.2.3)
+##  memoise            2.0.1     2021-11-26 [2] CRAN (R 4.2.3)
+##  mgcv               1.8-42    2023-03-02 [2] CRAN (R 4.2.3)
+##  mime               0.12      2021-09-28 [2] CRAN (R 4.2.3)
+##  miniUI             0.1.1.1   2018-05-18 [2] CRAN (R 4.2.3)
+##  multtest           2.54.0    2022-11-01 [2] Bioconductor
+##  nlme               3.1-162   2023-01-31 [2] CRAN (R 4.2.3)
+##  pacman             0.5.1     2019-03-11 [1] CRAN (R 4.2.3)
+##  patchwork        * 1.3.0     2024-09-16 [2] CRAN (R 4.2.3)
+##  permute            0.9-10    2026-02-06 [2] CRAN (R 4.2.3)
+##  phyloseq         * 1.42.0    2022-11-01 [2] Bioconductor
+##  pillar             1.9.0     2023-03-22 [2] CRAN (R 4.2.3)
+##  pkgbuild           1.4.5     2024-10-28 [2] CRAN (R 4.2.3)
+##  pkgconfig          2.0.3     2019-09-22 [2] CRAN (R 4.2.3)
+##  pkgload            1.4.0     2024-06-28 [2] CRAN (R 4.2.3)
+##  plyr               1.8.9     2023-10-02 [2] CRAN (R 4.2.3)
+##  profvis            0.4.0     2024-09-20 [2] CRAN (R 4.2.3)
+##  promises           1.3.0     2024-04-05 [2] CRAN (R 4.2.3)
+##  purrr            * 1.0.2     2023-08-10 [2] CRAN (R 4.2.3)
+##  R6                 2.5.1     2021-08-19 [2] CRAN (R 4.2.3)
+##  RColorBrewer       1.1-3     2022-04-03 [2] CRAN (R 4.2.3)
+##  Rcpp               1.0.13-1  2024-11-02 [2] CRAN (R 4.2.3)
+##  RCurl              1.98-1.16 2024-07-11 [2] CRAN (R 4.2.3)
+##  readr            * 2.1.5     2024-01-10 [2] CRAN (R 4.2.3)
+##  remotes            2.5.0     2024-03-17 [2] CRAN (R 4.2.3)
+##  reshape2           1.4.4     2020-04-09 [2] CRAN (R 4.2.3)
+##  rhdf5              2.42.1    2023-04-07 [2] Bioconductor
+##  rhdf5filters       1.10.1    2023-03-24 [2] Bioconductor
+##  Rhdf5lib           1.20.0    2022-11-01 [2] Bioconductor
+##  rlang              1.1.4     2024-06-04 [2] CRAN (R 4.2.3)
+##  rmarkdown          2.29      2024-11-04 [2] CRAN (R 4.2.3)
+##  rstatix          * 0.7.3     2025-10-18 [2] CRAN (R 4.2.3)
+##  rstudioapi         0.17.1    2024-10-22 [2] CRAN (R 4.2.3)
+##  S4Vectors          0.36.2    2023-02-26 [2] Bioconductor
+##  S7                 0.2.1     2025-11-14 [2] CRAN (R 4.2.3)
+##  scales             1.4.0     2025-04-24 [2] CRAN (R 4.2.3)
+##  sessioninfo        1.2.2     2021-12-06 [2] CRAN (R 4.2.3)
+##  shiny              1.9.1     2024-08-01 [2] CRAN (R 4.2.3)
+##  stringi            1.8.4     2024-05-06 [2] CRAN (R 4.2.3)
+##  stringr          * 1.5.1     2023-11-14 [2] CRAN (R 4.2.3)
+##  survival           3.5-3     2023-02-12 [2] CRAN (R 4.2.3)
+##  tibble           * 3.2.1     2023-03-20 [2] CRAN (R 4.2.3)
+##  tidyr            * 1.3.1     2024-01-24 [2] CRAN (R 4.2.3)
+##  tidyselect         1.2.1     2024-03-11 [2] CRAN (R 4.2.3)
+##  tidyverse        * 2.0.0     2023-02-22 [2] CRAN (R 4.2.3)
+##  timechange         0.3.0     2024-01-18 [2] CRAN (R 4.2.3)
+##  tzdb               0.4.0     2023-05-12 [2] CRAN (R 4.2.3)
+##  urlchecker         1.0.1     2021-11-30 [2] CRAN (R 4.2.3)
+##  usethis          * 3.0.0     2024-07-29 [2] CRAN (R 4.2.3)
+##  utf8               1.2.4     2023-10-22 [2] CRAN (R 4.2.3)
+##  vctrs              0.6.5     2023-12-01 [2] CRAN (R 4.2.3)
+##  vegan              2.7-3     2026-03-04 [2] CRAN (R 4.2.3)
+##  withr              3.0.2     2024-10-28 [2] CRAN (R 4.2.3)
+##  xfun               0.49      2024-10-31 [2] CRAN (R 4.2.3)
+##  xtable             1.8-4     2019-04-21 [2] CRAN (R 4.2.3)
+##  XVector            0.38.0    2022-11-01 [2] Bioconductor
+##  yaml               2.3.10    2024-07-26 [2] CRAN (R 4.2.3)
+##  zlibbioc           1.44.0    2022-11-01 [2] Bioconductor
+## 
+##  [1] /home/mz423/R/x86_64-pc-linux-gnu-library/4.2
+##  [2] /programs/R-4.2.3/lib64/R/library
+## 
+## ------------------------------------------------------------------------------
+\end{verbatim}
+
+\end{document}
