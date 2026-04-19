@@ -7,6 +7,15 @@ output:
   pdf_document: default
 ---
 
+### Scientific Questions of Analysis 
+Scientific Question: Do hospitalized patients with major depressive disorder (MDD) who have made a recent suicide attempt exhibit higher gut microbial alpha diversity compared to MDD patients without a history of suicide attempts? 
+
+Alpha diversity Null hypothesis: There is no difference in gut microbial alpha diversity between hospitalized MDD patients with a recent suicide attempt and those without a history of suicide attempts.
+
+Alternative hypothesis: Hospitalized MDD patients with a recent suicide attempt exhibit higher gut microbial alpha diversity compared to MDD patients without a history of suicide attempts.
+
+# Set seed and Load Packages 
+
 ```{r setup}
 start_time <- Sys.time()
 set.seed(238428)
@@ -16,29 +25,46 @@ pacman::p_load(tidyverse, devtools, patchwork, iNEXT, phyloseq,
 
 ```
 
+# Load in data and make metadata dataframe 
 ```{r}
+# Load data
 load("data/preprocessed_phyloseq.RData")
 preprocessed_physeq
+
+# Intuition check 
 min(sample_sums(preprocessed_physeq))
 
+# Create a metdata dataframe
 metadata_df <- 
   preprocessed_physeq %>%
   sample_data() %>%
   data.frame()
 
-
+# Take a look at the metadata dataframe
 glimpse(metadata_df)
 ```
+
+
 ```{r}
+
+# prepare iNEXT input data 
+# Species in rows while samples in columns
 iNEXT_input_df <- 
   preprocessed_physeq %>%
   otu_table() %>%
   data.frame()
 
+# Take a look 
+
 dim(iNEXT_input_df)
 iNEXT_input_df[1:5, 1:5]
 ```
+
+# Biodiversity Hill Numbers with iNEXT
+
 ```{r}
+# Run iNEXT
+
 iNEXT_data <- iNEXT(
   iNEXT_input_df,
   q = c(0, 1, 2),
@@ -50,11 +76,19 @@ save(iNEXT_data, file = "data/iNEXT_data.RData")
 ```
 
 ```{r}
+
+# Take a look 
+
 str(iNEXT_data)
 typeof(iNEXT_data)
 ```
 
+
+# Rarefaction Curves
+
 ```{r}
+
+# Colors Preparation
 color_df <- 
   iNEXT_input_df %>%
   colnames() %>%
@@ -65,6 +99,8 @@ head(color_df)
 colnames(color_df)[1] <- "names"
 
 head(color_df)
+
+# Make a helper dataframe for plotting with colors 
 
 iNEXT_color_df <- 
   color_df %>%
@@ -86,7 +122,10 @@ iNEXT_color_df <-
 
 head(iNEXT_color_df)
 ```
+
+
 ```{r}
+
 ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
   scale_color_manual(values = iNEXT_color_df$attempt_colors) + 
   scale_fill_manual(values = iNEXT_color_df$attempt_colors) + 
@@ -94,6 +133,10 @@ ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
   theme(legend.position = "none") + 
   labs(y = "Effective Number of ASVs", x = "Number of Sequences")
 ```
+
+
+# Manual Rarefaction Curves
+
 ```{r}
 iNEXT_manual_df <- 
   iNEXT_data$iNextEst$size_based %>%
@@ -131,8 +174,12 @@ iNEXT_manual_df %>%
 For the ggiNEXT and manual rarefaction curve plots, there should be enough sequences to analyze for q = 1 and q = 2, but not for q = 0 because many curves in q = 0 are still increasing and have not fully plateaued. Because of that, valid conclusion can be drawn on species richness when q = 1 and q = 2, because the curves stabilize clearly. However, it is probably not valid to draw conclusion when q = 0, because some curves are still increasing.
 
 
+# Statistical Testing 
 
 ```{r}
+
+# Tes if the data is normal 
+
 distinct_metadata_df <- metadata_df
 shapiro.test(distinct_metadata_df$AvgSpotLen)
 
@@ -144,6 +191,9 @@ glimpse(obs_div_df)
 
 ```
 ```{r}
+
+# Test if the data is normal
+
 obs_whole_rich_df <- 
   obs_div_df %>%
   dplyr::filter(Order.q == 0)
@@ -164,8 +214,10 @@ kw_attempt_rich <-
 kw_attempt_rich
 ```
 
+# Categorical Analysis 
 
 ```{r}
+# Add the plot 
 attempt_ggboxplot <- 
   ggboxplot(obs_whole_rich_df, x = "AttemptStatus", y = "qD", 
             color = "AttemptStatus", fill = "AttemptStatus", alpha = 0.3,
@@ -177,7 +229,7 @@ attempt_ggboxplot <-
   scale_fill_manual(values = c("Attempter" = "red",
                                "Non-attempter" = "blue")) + 
   labs(y = "# of Total ASVs (Richness)") + 
-  # Now, let's add the KW results 
+  # Add the KW results 
   labs(subtitle = get_test_label(kw_attempt_rich, detailed = TRUE)) + 
   theme_bw() + 
   theme(legend.position = "none",
@@ -187,10 +239,13 @@ attempt_ggboxplot <-
                                    vjust = 1))
 
 # Show the plot
+
 attempt_ggboxplot
 ```
 
 ```{r}
+# Plot boxplots 
+
 obs_div_df %>%
   ggplot(aes(x = AttemptStatus, y = qD, fill = AttemptStatus, 
              color = AttemptStatus)) + 
@@ -324,6 +379,7 @@ Wilcoxon rank-sum tests using a one-sided alternative hypothesis showed no signi
 ### Interpretation 3
 I statistically tested my scientific question using Wilcoxon rank-sum tests to compare alpha diversity between suicide attempters and non-attempters. I used this test because my variable of interest, Attempt Status, is categorical, and my alpha diversity data were not normally distributed, making a non-parametric test more appropriate than ANOVA. I conducted separate one-sided Wilcoxon tests for richness (q = 0), Shannon diversity (q = 1), and Simpson diversity (q = 2), using an alternative hypothesis that alpha diversity would be greater in attempters compared to non-attempters. This allowed me to statistically evaluate whether gut microbial diversity differed between groups across all ASVs, common ASVs, and dominant ASVs.
 
+# Info for Reproducibility 
 
 ```{r}
 end_time <- Sys.time()
