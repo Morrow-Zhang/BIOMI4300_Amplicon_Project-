@@ -5,9 +5,20 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+# Goals
+Goal of this analysis is to remove any ASVS from chloroplasts and mitochondria. Evaluate negative and positive controls while removing the negative control. Check for reverse complements and sequencing depth of samples. Add the metada for my dataset and write a preprocessed_physeq for downstream workflow.
+
+# Set up the Environment 
+
 ```{r }
+
+# Set seed
 set.seed(238428)
+
+# Time of start
 start_time <- Sys.time()
+
+# Load packages 
 pacman::p_load(devtools, phyloseq, Biostrings, tidyverse, dada2, patchwork,
                # Note to add ggpubr & rstatix!!
                ggpubr, rstatix, install = FALSE)
@@ -18,11 +29,17 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+# Load Phyloseq Data 
+
 ```{r}
 load("data/raw_physeq.RData")
 
 raw_physeq
 ```
+# Clean up the Data 
+
+## Remove Chloroplasts and Mitochondria 
 
 ```{r}
 noChloros_physeq <- 
@@ -44,38 +61,63 @@ num_mito_ASVs
 
 There were 0 chloroplast ASVs and 0 mitochondrial ASVs detected in my dataset. This seems reasonable because my samples are rectal swab microbiome samples from human patients, which are expected to primarily contain bacterial DNA rather than plant-derived chloroplast sequences. Additionally, the study included contamination monitoring and filtering steps, which likely removed potential mitochondrial or chloroplast sequences if present.
 
+
+# Evaluate and remove negative controls 
 ```{r}
+
+# Check if there is negative control 
+
 sample_names(noChlorosMitos_physeq)
 ```
+
+
 ### INTERPRETATION #2
 
 No negative control samples were detected in my dataset. All sample names appear as SRR accession IDs, and none are labeled as controls.
 
+
+# Positive Controls 
+
 ```{r}
+
+# check if there is positive control 
 sample_data(noChlorosMitos_physeq)
 ```
+
+
 ### INTERPRETATION #3
 
 My dataset does not appear to include a mock community sample. The sample names in the downloaded dataset are all SRR accession IDs for human gut samples, and there is no sample labeled as a mock control. 
 
+# Reverse Complements
+
 
 ```{r}
+# Pull out the Taxa table 
 
 tax_table <- 
   noChlorosMitos_physeq %>%
   tax_table() %>% 
   data.frame()
 
+# Grab ASV sequences and names 
+
 asv_names <- tax_table$ASV
 asv_seqs <- tax_table$ASVseqs
 
+# Create empty comparison matrix 
+
 asv_rev_comp <- matrix(nrow=length(asv_seqs), ncol = length(asv_seqs)) 
+
+# Fix names in rows and columns 
 
 rownames(asv_rev_comp) <- asv_names
 colnames(asv_rev_comp) <- asv_names
 
+# Convert sequences to Biostrings 
 asv_dna <- DNAStringSet(asv_seqs) 
 
+# Take a look
 head(asv_dna)
 
 asv_rev_dna <- reverseComplement(asv_dna) 
@@ -93,7 +135,10 @@ cat("For", sum(asv_rev_comp) / 2,"ASVs, the reverse complement will need to be r
 There were 0 reverse complement ASVs detected in my dataset. This indicates that no ASV sequences were identified as reverse complements of each other, so no sequences need to be removed at this step. 
 
 
+# Sequencing Depth 
+
 ```{r}
+# Make a metadata dataframe for joining 
 
 metadata_df <- 
   noChlorosMitos_physeq %>%
@@ -108,6 +153,7 @@ metadata_df <-
     )
   )
 
+# What is the library size/sequencing depth for each sample 
 
 seqSums_df <- 
   noChlorosMitos_physeq %>%
@@ -117,7 +163,11 @@ seqSums_df <-
   rownames_to_column(var = "names") %>%
   left_join(., metadata_df, by = "names")
 
+# Rename second columns 
+
 colnames(seqSums_df)[2] <- "TotalSeqs"
+
+# Take a look 
 
 dim(seqSums_df)
 head(seqSums_df)
@@ -130,6 +180,8 @@ seqSums_df %>%
   arrange(TotalSeqs) %>%
   head()
 ```
+
+
 ```{r}
 # bar plot 
 numSeq_bar_plot <- 
@@ -168,6 +220,7 @@ The sequencing depth varies substantially across samples, with many samples havi
 
 Overall, a few samples likely do not have enough reads to reliably represent microbial diversity, particularly those with fewer than 100 reads. These very low-depth samples may need to be removed in later filtering steps to improve data quality and ensure more reliable downstream diversity analysis. 
 
+# Remove samples with few reads 
 
 ```{r}
 summary(seqSums_df$TotalSeqs)
@@ -196,10 +249,15 @@ nsamples(preprocessed_physeq)
 
 
 ```{r}
+
+# Check for sequencing depth 
+
 seqSums_df %>%
   dplyr::select(names, TotalSeqs) %>%
   arrange(TotalSeqs)
 ```
+
+# Write out the data 
 
 
 ```{r}
@@ -210,12 +268,17 @@ save(
 ```
 
 
+# Final info for reproducibility 
 
 ```{r}
+
+# Check Render Time 
+
 end_time <- Sys.time()
 end_time 
 elapsed_time <- round((end_time - start_time), 3)
 elapsed_time
+# Session Info 
 devtools::session_info()
 ```
 
