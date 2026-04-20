@@ -224,25 +224,26 @@ Overall, a few samples likely do not have enough reads to reliably represent mic
 
 ```{r}
 summary(seqSums_df$TotalSeqs)
-sum(seqSums_df$TotalSeqs < 100)
+#sum(seqSums_df$TotalSeqs < 100)
 
-seqSums_df %>%
-  dplyr::filter(TotalSeqs < 100) %>%
-  dplyr::select(names, TotalSeqs) %>%
-  dplyr::arrange(TotalSeqs)
+#seqSums_df %>%
+  #dplyr::filter(TotalSeqs < 100) %>%
+  #dplyr::select(names, TotalSeqs) %>%
+  #dplyr::arrange(TotalSeqs)
 
-preprocessed_physeq <- 
-  prune_samples(
-    !(sample_names(noChlorosMitos_physeq) %in% c(
-      "SRR35320078",
-      "SRR35320071",
-      "SRR35320081",
-      "SRR35320073",
-      "SRR35320124"
-    )),
-    noChlorosMitos_physeq
-  )
+#preprocessed_physeq <- 
+ # prune_samples(
+   # !(sample_names(noChlorosMitos_physeq) %in% c(
+   #   "SRR35320078",
+   #   "SRR35320071",
+   #   "SRR35320081",
+   #  "SRR35320073",
+    #  "SRR35320124"
+   # )),
+   # noChlorosMitos_physeq
+ # )
 
+preprocessed_physeq <- noChlorosMitos_physeq
 min(sample_sums(preprocessed_physeq))
 nsamples(preprocessed_physeq)
 ```
