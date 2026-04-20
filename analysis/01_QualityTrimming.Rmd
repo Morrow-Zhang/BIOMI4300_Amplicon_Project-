@@ -41,10 +41,9 @@ pacman::p_load(tidyverse, dada2, patchwork,
 
 
 ```{r}
-
 # Set the raw fastq path to the raw sequencing files 
 # Path to the fastq files 
-cutadapt_fastqs_path <- "../data/01_QualityTrimming/cutadapt"
+cutadapt_fastqs_path <- "data/01_QualityTrimming/cutadapt"
 
 list.files(cutadapt_fastqs_path) %>% head()
 forward_reads <- list.files(cutadapt_fastqs_path, pattern = "_1_trimmed.fastq.gz$", full.names = TRUE)
@@ -187,7 +186,7 @@ sample_names <- sapply(strsplit(basename(forward_reads), "_"), `[`, 1)
 
 head(sample_names)
 
-filtered_fastqs_path <- "../data/01_QualityTrimming/filtered_fastqs"
+filtered_fastqs_path <- "data/01_QualityTrimming/filtered_fastqs"
 
 filtered_fastqs_path
 

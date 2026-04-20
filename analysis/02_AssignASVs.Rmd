@@ -188,7 +188,7 @@ Taking into account INTERPRETATIONS #1 and #2, I suggest trimming the ASV sequen
 
 ```{r trimming}
 raw_ASV_table_trimmed <- 
-  raw_ASV_table[, nchar(colnames(raw_ASV_table)) == 403]
+  raw_ASV_table[, nchar(colnames(raw_ASV_table)) %in% c(400:404, 421:423, 426:428)]     # == 403]
 table(nchar(getSequences(raw_ASV_table_trimmed)))
 percRetained_Trimmed <- sum(raw_ASV_table_trimmed) / sum(raw_ASV_table)
 percRetained_Trimmed
