@@ -17,7 +17,14 @@ This folder contains data files used in the BIOMI4300 Amplicon Sequencing Projec
 
 - **ASVs.fasta**  
   FASTA file containing the nucleotide sequences of each ASV.
+  
+### Metadata Files
 
+- **SraRunTable (11).csv**  
+  Metadata file downloaded from NCBI SRA containing sample information for each sequencing run, including sample identifiers and experimental metadata used to assign samples to groups (e.g., AttemptStatus).
+
+- **SRR_Acc_List (3).txt**  
+  List of SRA accession numbers used to download raw sequencing FASTQ files.
 
 ### Phyloseq Objects
 
