@@ -259,7 +259,7 @@ postQC_aggregate_plot
 
 
 ```{r save file}
-save(filtered_reads, file = "../data/01_QualityTrimming/filtered_reads.RData")
+save(filtered_reads, file = "data/01_QualityTrimming/filtered_reads.RData")
 ```
 
 ```{r assess filter and trim}
