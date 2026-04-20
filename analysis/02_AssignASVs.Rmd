@@ -582,7 +582,7 @@ save(track_counts_df, file = "data/track_read_counts.RData")
 ```
 
 ```{r}
-metadata_physeq <- read.csv("data/_SraRunTable (11).csv")
+metadata_physeq <- read.csv("data/SraRunTable (11).csv")
 head(metadata_physeq)
 dim(metadata_physeq)
 
