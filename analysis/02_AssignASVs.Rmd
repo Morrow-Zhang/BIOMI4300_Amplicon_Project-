@@ -313,6 +313,11 @@ track_counts_df %>%
 ```
 
 
+
+
+
+
+
 ```{r}
 plot_ReadDepth <- 
   track_counts_df %>%
@@ -363,14 +368,14 @@ raw_fastqs_path <- "data/00_raw_gzipped_fastqs"
 forward_reads <- list.files(raw_fastqs_path, pattern = "_1.fastq.gz$", full.names = TRUE)
 
 filtered_fastqs_path <- "data/01_QualityTrimming/filtered_fastqs"
-expected <- readLines("SRR_Acc_List (3).txt")
+expected <- readLines("data/SRR_Acc_List (3).txt")
 actual <- gsub("_1.fastq.gz", "", basename(forward_reads))
 setdiff(expected, actual)
 ```
 ```{r}
 # Here I am extracting metadat related information 
 
-metadata <- read.csv("SraRunTable (11).csv")
+metadata <- read.csv("data/SraRunTable (11).csv")
 metadata$AttemptStatus <- ifelse(
   grepl("non attempters", metadata$source_material_id),
   "Non-attempter",
@@ -577,7 +582,7 @@ save(track_counts_df, file = "data/track_read_counts.RData")
 ```
 
 ```{r}
-metadata_physeq <- read.csv("SraRunTable (11).csv")
+metadata_physeq <- read.csv("data/_SraRunTable (11).csv")
 head(metadata_physeq)
 dim(metadata_physeq)
 

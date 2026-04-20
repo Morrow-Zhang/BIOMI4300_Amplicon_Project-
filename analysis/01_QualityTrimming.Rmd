@@ -44,17 +44,13 @@ pacman::p_load(tidyverse, dada2, patchwork,
 
 # Set the raw fastq path to the raw sequencing files 
 # Path to the fastq files 
+cutadapt_fastqs_path <- "../data/01_QualityTrimming/cutadapt"
 
-raw_fastqs_path <- "data/00_raw_gzipped_fastqs"
-
-list.files(raw_fastqs_path) %>% head()
-forward_reads <- list.files(raw_fastqs_path, pattern = "_1.fastq.gz", full.names = TRUE)
+list.files(cutadapt_fastqs_path) %>% head()
+forward_reads <- list.files(cutadapt_fastqs_path, pattern = "_1_trimmed.fastq.gz$", full.names = TRUE)
 head(forward_reads)
-reverse_reads <- list.files(raw_fastqs_path, pattern = "_2.fastq.gz", full.names = TRUE)
+reverse_reads <- list.files(cutadapt_fastqs_path, pattern = "_2_trimmed.fastq.gz$", full.names = TRUE)
 head(reverse_reads)
-
-length(forward_reads)
-length(reverse_reads)
 ```
 
 # Assess Raw Read Quality 
@@ -79,7 +75,7 @@ preQC_aggregate_plot
 
 ```{r Primer Search}
 
-raw_fastqs <- readFastq(dirPath = raw_fastqs_path, pattern = ".fastq.gz")
+raw_fastqs <- readFastq(dirPath = cutadapt_fastqs_path, pattern = ".fastq.gz")
 all_seqs <- sread(raw_fastqs)
 
 f_primer <- c("CCTACGGGNGGCWGCAG")
@@ -119,6 +115,9 @@ paste(
 )
 
 ```
+
+
+
 ```{r Forward Primer}
 Fprimer_vmatch <- 
   vcountPattern(pattern = f_primer, 
@@ -143,6 +142,9 @@ paste(
   "% of sequences"
 )
 ```
+
+
+
 ```{r Reverse Primer}
 Rprimer_vmatch <-
   vcountPattern(pattern = r_primer,
@@ -170,8 +172,10 @@ paste(
 
 
 ```{r remove extra one}
-setdiff(basename(reverse_reads), gsub("_1.fastq.gz","_2.fastq.gz", basename(forward_reads)))
-reverse_reads <- reverse_reads[basename(reverse_reads) != "SRR35320083_2.fastq.gz"]
+setdiff(basename(reverse_reads), gsub("_1_trimmed.fastq.gz","_2_trimmed.fastq.gz", basename(forward_reads)))
+
+reverse_reads <- reverse_reads[basename(reverse_reads) != "SRR35320083_2_trimmed.fastq.gz"]
+
 length(forward_reads)
 length(reverse_reads)
 
@@ -183,7 +187,7 @@ sample_names <- sapply(strsplit(basename(forward_reads), "_"), `[`, 1)
 
 head(sample_names)
 
-filtered_fastqs_path <- "data/01_QualityTrimming/filtered_fastqs"
+filtered_fastqs_path <- "../data/01_QualityTrimming/filtered_fastqs"
 
 filtered_fastqs_path
 
@@ -197,6 +201,11 @@ filtered_reverse_reads <-
 
 head(filtered_reverse_reads)
 ```
+
+
+
+
+
 ```{r Trimming!}
 filtered_reads <- 
   filterAndTrim(
@@ -205,13 +214,13 @@ filtered_reads <-
     rev = reverse_reads,
     filt.rev = filtered_reverse_reads,
     truncLen = c(280, 220),
-    trimLeft = c(17, 21),
+    #trimLeft = c(17, 21),#primer is removed with cutadapt instead 
     maxN = 0,
-    maxEE = c(1, 1),
+    maxEE = c(2, 2),
     truncQ = 2,
     rm.phix = TRUE,
     compress = TRUE,
-    multithread = 10
+    multithread = 20
   )
 
 ```
@@ -248,12 +257,14 @@ postQC_aggregate_plot
 
 ```
 
+
+
 ```{r save file}
-save(filtered_reads, file = "data/01_QualityTrimming/filtered_reads.RData")
+save(filtered_reads, file = "../data/01_QualityTrimming/filtered_reads.RData")
 ```
 
 ```{r assess filter and trim}
-install.packages("DT")
+#install.packages("DT")
 
 
 filtered_df <- as.data.frame(filtered_reads) %>%

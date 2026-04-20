@@ -1,0 +1,119 @@
+---
+title: "05_Ordination.Rmd"
+author: "Morrow Zhang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+# Goal
+
+Load in phyloseq data with rooted tree and colors and functions.
+Evaluate sequencing depth and remove samples, if needed.
+Normalize the read counts between samples.
+Calculate community dissimilarities. Numbers between 0 and 1. If 0, completely similar versus if they are 1, then they’re completely dissimilar.
+Sorensen: Shared Species as a binary value: Abundance-unweighted
+Bray-Curtis: Shared Abundant species: Abundance-weighted
+(Abundance-)Weighted UNIFRAC: Consider Abundant Species and where they fall on the tree
+Visualize the community data with two unconstrained Ordinations:
+PCoA: Linear Method. Eigenvalue = how much variation is explained by each axis. Choose to view axis 1, 2, 3, etc. and plot them together.
+NMDS: Non-linear. Smush multiple Dimensions into 2 or 3 axes. Need to report Stress value (ideally <0.15).
+Run statistics with functions from the vegan R package:
+PERMANOVA with adonis2().
+betadispR with betadisper() and permutest().
+
+# Scientific Question 
+### Interpretation 1 
+Scientific Question: Do hospitalized patients with MDD who have made a recent suicide attempt have distinct microbial community composition compared to MDD patients without a history of suicide attempts?
+
+Null Hypothesis: Gut microbial community composition does not differ between hospitalized MDD patients with a recent suicide attempt and those without a history of suicide attempts.
+
+Alternative Hypothesis: Hospitalized MDD patients with a recent suicide attempt have significantly different microbial community composition compared to MDD patients without a history of suicide attempts.
+
+These hypotheses relate to both abundance-unweighted and abundance-weighted-beta diversity metrics. Abundance-unweighted metrics test whether different microbial taxa are present between attempters and non-attempters, while abundance-weighted metrics test whether dominant taxa differ in relative abundance between groups.
+
+
+```{r setup, include=FALSE}
+start_time <- Sys.time()
+
+set.seed(238428)
+
+pacman::p_load(tidyverse, devtools, phyloseq, patchwork, vegan, 
+               install = FALSE)
+
+
+```
+
+```{r}
+# load phyloseq object
+load("../data/preprocessed_phyloseq.RData")
+preprocessed_physeq
+min(sample_sums(preprocessed_physeq))
+```
+```{r}
+# find if there is any outlier 
+
+sort(sample_sums(preprocessed_physeq))
+```
+```{r}
+metadata_df <- 
+  preprocessed_physeq %>%
+  sample_data() %>%
+  data.frame()
+```
+
+```{r}
+raw_TotalSeqs_df <- 
+  preprocessed_physeq %>%
+  # Calculate the total number of sequences/reads
+  sample_sums() %>%
+  data.frame()
+
+# Take a look 
+head(raw_TotalSeqs_df)
+```
+
+
+```{r}
+colnames(raw_TotalSeqs_df)[1] <- "TotalSeqs"
+
+# add a new column of num_ASVs (RAW, non-noramlized # ASVs)
+raw_TotalSeqsASVs_df <- 
+  raw_TotalSeqs_df %>%
+  mutate(num_ASVs = colSums(otu_table(preprocessed_physeq) > 1))
+
+# View(raw_TotalSeqsASVs_df)
+
+#  histogram of seq depth 
+rawSeq_histogram <- 
+  raw_TotalSeqsASVs_df %>%
+  ggplot(aes(x = TotalSeqs)) + 
+  geom_histogram(bins = 50) + 
+  scale_x_continuous(limits = c(0, 7500)) + 
+  labs(title = "Raw Seq Depth Histogram") + 
+  theme_bw()
+
+# Seq Depth versus num_ASVs
+rawSeq_vs_numASV_plot <- 
+  raw_TotalSeqsASVs_df %>%
+  ggplot(aes(x = num_ASVs, y = TotalSeqs)) + 
+  geom_point() + 
+  scale_y_continuous(limits = c(0, 7500)) +
+  geom_smooth(method = "lm") + 
+  labs(title = "Raw Seq Depth vs # ASVs") + 
+  theme_bw()
+
+# test significance? 
+summary(lm(TotalSeqs ~ num_ASVs, data = raw_TotalSeqsASVs_df))
+```
+```{r}
+rawSeq_histogram + rawSeq_vs_numASV_plot +
+  plot_annotation(tag_levels = "A")
+```
+
+```{r}
+min(sample_sums(preprocessed_physeq))
+```
+
+```{r}
+
+```
+
