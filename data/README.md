@@ -18,7 +18,6 @@ This folder contains data files used in the BIOMI4300 Amplicon Sequencing Projec
 - **ASVs.fasta**  
   FASTA file containing the nucleotide sequences of each ASV.
 
----
 
 ### Phyloseq Objects
 
@@ -28,21 +27,19 @@ This folder contains data files used in the BIOMI4300 Amplicon Sequencing Projec
 - **preprocessed_phyloseq.RData**  
   Processed phyloseq object used for downstream diversity analysis.
 
----
 
 ### Diversity Analysis
 
 - **iNEXT_data.RData**  
   Data prepared for diversity estimation and rarefaction analysis.
 
----
+
 
 ### Quality Control
 
 - **track_read_counts.RData**  
   Tracks read counts at each step of the DADA2 pipeline.
 
----
 
 ### Raw Sequence Data
 
@@ -52,9 +49,9 @@ This folder contains data files used in the BIOMI4300 Amplicon Sequencing Projec
 - **01_QualityTrimming/**  
   Contains filtered and trimmed FASTQ files after quality control.
 
----
+
 
 ## Notes
 
 - Files larger than 50 MB are not committed to GitHub according to repository guidelines.
-- Raw FASTQ files are stored locally or on the server and may not be included in the repository.
+
