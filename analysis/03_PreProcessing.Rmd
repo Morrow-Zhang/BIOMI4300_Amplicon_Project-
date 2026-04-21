@@ -214,15 +214,20 @@ numSeq_bar_plot + numSeq_hist_plot + numSeq_density_plot +
 ```
 
 
+
 ### INTERPRETATION #5
 
-The sequencing depth varies substantially across samples, with many samples having low read counts and a few samples having much higher sequencing depths. Most samples fall between approximately 200 and 1500 reads while a few samples have extremely low read counts below 100 reads. The distributions of sequencing depth appear similar between the attempter and non-attempter groups, indicating that sequencing depth is not strongly biased toward one group.
+Sequencing depth varies across samples, with read counts ranging approximately from 12,000 to 47,000 reads. Most samples cluster between about 25,000 and 35,000 reads, indicating generally consistent sequencing depth across the dataset.
 
-Overall, a few samples likely do not have enough reads to reliably represent microbial diversity, particularly those with fewer than 100 reads. These very low-depth samples may need to be removed in later filtering steps to improve data quality and ensure more reliable downstream diversity analysis. 
+The distribution of sequencing depth appears similar between the attempter and non-attempter groups, as shown by the overlapping histograms and density curves. This suggests that sequencing depth is not strongly biased toward one group, reducing the likelihood that group differences are driven by uneven sequencing effort.
+
+Overall, the sequencing depth across samples appears sufficient and relatively consistent, available for reliable downstream diversity analysis.
+
 
 # Remove samples with few reads 
 
 ```{r}
+# no longer needing to remove 
 summary(seqSums_df$TotalSeqs)
 #sum(seqSums_df$TotalSeqs < 100)
 
