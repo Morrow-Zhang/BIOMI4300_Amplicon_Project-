@@ -192,8 +192,11 @@ ggsave(
 ```
 
 
-### Interpretation 1 
-For the ggiNEXT and manual rarefaction curve plots, there should be enough sequences to analyze for q = 1 and q = 2, but not for q = 0 because many curves in q = 0 are still increasing and have not fully plateaued. Because of that, valid conclusion can be drawn on species richness when q = 1 and q = 2, because the curves stabilize clearly. However, it is probably not valid to draw conclusion when q = 0, because some curves are still increasing.
+
+
+### Interpretation 1
+
+Based on both the ggiNEXT and manual rarefaction curve plots, sequencing depth appears sufficient to support reliable diversity estimates across all diversity orders (q = 0, q = 1, and q = 2). For most samples, the rarefaction curves rise rapidly and then approach a plateau, indicating that the majority of detectable diversity has been captured.
 
 
 # Statistical Testing 
@@ -222,7 +225,7 @@ obs_whole_rich_df <-
 
 shapiro.test(obs_whole_rich_df$qD)
 ```
-# p-value is less than 0.5 > my data is not normal 
+# p-value is less than 0.5, which means that my data is not normal 
 
 
 
@@ -433,7 +436,7 @@ rich_ggboxplot + simps_ggboxplot
 
 
 ### Interpretation 2
-Wilcoxon rank-sum tests using a one-sided alternative hypothesis showed no significant differences in alpha diversity between suicide attempters and non-attempters across all diversity levels. When q = 0, p value is 0.11. When q = 1, p value is 0.237. When q = 2, p value is 0.443. Overall, these results fail to reject the null hypothesis and indicate that hospitalized MDD patients with recent suicide attempts do not exhibit significantly higher gut microbial alpha diversity compared to those without a history of suicide attempts.
+Wilcoxon rank-sum tests using a one-sided alternative hypothesis showed no significant differences in alpha diversity between suicide attempters and non-attempters across all diversity levels. When q = 0, p value is 0.0799. When q = 1, p value is 0.245. When q = 2, p value is 0.319. Overall, these results fail to reject the null hypothesis and indicate that hospitalized MDD patients with recent suicide attempts do not exhibit significantly higher gut microbial alpha diversity compared to those without a history of suicide attempts.
 
 
 ### Interpretation 3
