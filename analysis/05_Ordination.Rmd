@@ -20,7 +20,9 @@ Run statistics with functions from the vegan R package:
 PERMANOVA with adonis2().
 betadispR with betadisper() and permutest().
 
+
 # Scientific Question 
+
 ### Interpretation 1 
 Scientific Question: Do hospitalized patients with MDD who have made a recent suicide attempt have distinct microbial community composition compared to MDD patients without a history of suicide attempts?
 
@@ -43,7 +45,11 @@ set.seed(238428)
 pacman::p_load(tidyverse, devtools, phyloseq, patchwork, vegan, 
                install = FALSE)
 
-source("../functions.R")
+source("code/functions.R")
+
+library(ggplot2)
+library(patchwork)
+library(phyloseq)
 ```
 
 # load in data 
@@ -51,14 +57,14 @@ source("../functions.R")
 ```{r}
 
 # load phyloseq object
-load("../data/preprocessed_phyloseq.RData")
+load("data/preprocessed_phyloseq.RData")
 preprocessed_physeq
 min(sample_sums(preprocessed_physeq))
 ```
 # Remove outlier if any 
 
 ```{r}
-# find if there is any outlier 
+# There is no outlier to remove 
 
 sort(sample_sums(preprocessed_physeq))
 ```
@@ -126,7 +132,32 @@ summary(lm(TotalSeqs ~ num_ASVs, data = raw_TotalSeqsASVs_df))
 
 rawSeq_histogram + rawSeq_vs_numASV_plot +
   plot_annotation(tag_levels = "A")
+
+# save the plot 
+combined_rawSeq_plot <-
+  rawSeq_histogram +
+  rawSeq_vs_numASV_plot +
+  plot_annotation(tag_levels = "A")
+
+ggsave(
+  filename = "figures/05_Ordination/rawSeq_depth_and_ASVs.png",
+  plot = combined_rawSeq_plot,
+  width = 10,
+  height = 5,
+  dpi = 300
+)
 ```
+
+
+
+
+
+
+### INTERPRETATION 2 
+
+The read counts were scaled to 12,368 reads per sample, which is the minimum sequencing depth observed in the dataset. This value was chosen to retain all samples while standardizing sequencing depth across samples.
+
+Scaling to this minimum depth may result in the loss of rare taxa from samples with higher sequencing depth. However, it ensures that downstream beta-diversity comparisons reflect true biological differences rather than differences caused by uneven sequencing depth.
 
 
 # Scale the Read Counts
@@ -210,7 +241,28 @@ scaledSeq_vs_numASV_plot <-
 # Put the two plots together.
 scaledSeq_histogram + scaledSeq_vs_numASV_plot +
   plot_annotation(tag_levels = "A")
+
+combined_scaledSeq_plot <-
+  scaledSeq_histogram +
+  scaledSeq_vs_numASV_plot +
+  plot_annotation(tag_levels = "A")
+
+# Save figure
+ggsave(
+  filename = "figures/05_Ordination/scaledSeq_depth_and_ASVs.png",
+  plot = combined_scaledSeq_plot,
+  width = 10,
+  height = 5,
+  dpi = 300
+)
 ```
+
+### INTERPRETATION 3 
+
+Yes, the total number of sequences across samples is in the same general range after scaling. The sequencing depth ranges from 12,322 to 12,384 reads, with a total range of 62 reads.
+
+This indicates that sequencing depth has been effectively standardized across samples. As a result, differences in the observed number of ASVs are less likely to be driven by sequencing depth and more likely to reflect true biological differences among samples.
+
 
 # Calculating dissimarity 
 
@@ -235,6 +287,11 @@ scaled_bray_dist <- phyloseq::distance(scaled_physeq, method = "bray", binary = 
 #scaled_wUnifrac_dist <- phyloseq::distance(scaled_physeq, method = "wunifrac")
 
 ```
+
+### INTERPRETATION 4 
+
+Bray-Curtis is the dissimilarity metric most related to my scientific question because it accounts for differences in taxa abundance between groups, which is important for comparing microbial community composition between attempters and non-attempters.
+
 
 # Visualize Community Dissimilarity with Ordination
 
@@ -263,52 +320,98 @@ sample_data(preprocessed_physeq)$AttemptStatus <-
 ```
 
 
-```{r}
-table(sample_data(preprocessed_physeq)$AttemptStatus, useNA = "ifany")
-```
-
 
 ```{r}
-attempt_colors <- c(
-  "Attempter" = "red",
-  "Non-attempter" = "blue"
+
+# add in necessary metadata 
+sample_df <- data.frame(sample_data(scaled_physeq))
+
+sample_df$AttemptStatus <- ifelse(
+  grepl("non", sample_df$source_material_id, ignore.case = TRUE),
+  "Non-attempter",
+  ifelse(
+    grepl("attempt", sample_df$source_material_id, ignore.case = TRUE),
+    "Attempter",
+    NA
+  )
 )
 
-soren_pcoa_plot <-
-  plot_ordination(
-    physeq = preprocessed_physeq,
-    ordination = soren_pcoa,
-    color = "AttemptStatus",
-    title = "Sorensen PCoA"
-  ) +
-  geom_point(size = 5, alpha = 0.7) +
-  scale_color_manual(values = attempt_colors) +
-  theme_bw() +
-  theme(legend.position = "right")
+sample_data(scaled_physeq) <- sample_data(sample_df)
 
-bray_pcoa_plot <-
-  plot_ordination(
-    physeq = preprocessed_physeq,
-    ordination = bray_pcoa,
-    color = "AttemptStatus",
-    title = "Bray-Curtis PCoA"
-  ) +
-  geom_point(size = 5, alpha = 0.7) +
-  scale_color_manual(values = attempt_colors) +
-  theme_bw() +
-  theme(legend.position = "right")
+table(sample_data(scaled_physeq)$AttemptStatus, useNA = "ifany")
 
-soren_pcoa_plot + bray_pcoa_plot +
-  plot_layout(guides = "collect") +
-  plot_annotation(tag_levels = "A")
+```
+
+# PCoA 
+
+```{r}
+# attempt_colors <- c(
+#  "Attempter" = "red",
+#  "Non-attempter" = "blue"
+#)
+
+#soren_pcoa_plot <-
+  # plot_ordination(
+    # physeq = preprocessed_physeq,
+    # ordination = soren_pcoa,
+    # color = "AttemptStatus",
+    # title = "Sorensen PCoA"
+  # ) +
+  # geom_point(size = 5, alpha = 0.7) +
+  # scale_color_manual(values = attempt_colors) +
+  # theme_bw() +
+  # theme(legend.position = "right")
+
+# Bray-Curtis
+
+# bray_pcoa_plot <-
+  # plot_ordination(
+    # physeq = preprocessed_physeq,
+    # ordination = bray_pcoa,
+    # color = "AttemptStatus",
+    # title = "Bray-Curtis PCoA"
+  # ) +
+  # geom_point(size = 5, alpha = 0.7) +
+  # scale_color_manual(values = attempt_colors) +
+  # theme_bw() +
+  # theme(legend.position = "right")
+
+# soren_pcoa_plot + bray_pcoa_plot +
+  # plot_layout(guides = "collect") +
+  # plot_annotation(tag_levels = "A")
+
+# combined_pcoa_plot <-
+  # soren_pcoa_plot +
+  # bray_pcoa_plot +
+  # plot_layout(guides = "collect") +
+  # plot_annotation(tag_levels = "A")
+
+
+# ggsave(
+  # filename = "figures/05_Ordination/sorensen_bray_pcoa.png",
+  # plot = combined_pcoa_plot,
+  # width = 10,
+  # height = 5,
+  # dpi = 300
+# )
+
+
 ```
 
 ```{r}
-sample_data(scaled_physeq)$AttemptStatus <-
-  sample_data(preprocessed_physeq)$AttemptStatus
-table(sample_data(scaled_physeq)$AttemptStatus, useNA = "ifany")
-```
+ # I have this extra chunk, because when I try to knit the previous chunk, it always gives me error when it could run normally in R (not when I was trying to knit)
+# I decided to comment out the previous chunk and just load my generated image below from my saved figures. 
 
+
+library(png)
+library(grid)
+
+img <- png::readPNG("figures/05_Ordination/sorensen_bray_pcoa.png")
+
+grid.newpage()
+grid.raster(img)
+
+```
 
 # NMDS: Non-Metric Multidimensional Scaling
 
@@ -367,16 +470,65 @@ bray_nmds_plot <-
 soren_nmds_plot + bray_nmds_plot +
   plot_layout(guides = "collect") +
   plot_annotation(tag_levels = "A")
+
+combined_nmds_plot <-
+  soren_nmds_plot + bray_nmds_plot +
+  plot_layout(guides = "collect") +
+  plot_annotation(tag_levels = "A")
+
+ggsave(
+  filename = "figures/05_Ordination/NMDS_Sorensen_BrayCurtis.png",
+  plot = combined_nmds_plot,
+  width = 10,
+  height = 5,
+  dpi = 300
+)
 ```
+
+
+
+### INTERPRETATION 6 
+
+The NMDS plots based on Sorensen and Bray-Curtis dissimilarity show substantial overlap between attempters and non-attempters with no clear separation between the two groups. Some samples are more spread out in the Sorensen NMDS, but overall both groups still occupy overlapping regions of ordination space.
+
+These NMDS results are generally consistent with the PCoA results from Interpretation 5, since both methods show broad overlap rather than distinct clustering by AttemptStatus. The main difference is that the Sorensen NMDS shows slightly greater spread among samples, whereas the Bray-Curtis NMDS appears somewhat more compact, but both ordination methods support the same overall conclusion
 
 # All ordinations together 
 
 ```{r}
-soren_pcoa_plot + bray_pcoa_plot + 
-soren_nmds_plot + bray_nmds_plot + 
-  plot_layout(guides = "collect") +
-  plot_annotation(tag_levels = "A")
+# I run into the same issue again, so I have commentted codes out and just load the saved figure. 
+
+#all_ordination_plot <- 
+#  soren_pcoa_plot + bray_pcoa_plot + 
+#soren_nmds_plot + bray_nmds_plot + 
+#  plot_layout(guides = "collect") +
+#  plot_annotation(tag_levels = "A")
+
+#all_ordination_plot
+
+#ggsave(
+#  filename = "figures/05_Ordination/All_Ordinations_PCoA_NMDS.png",
+#  plot = all_ordination_plot,
+#  width = 10,
+ # height = 8,
+ # dpi = 300
+#)
+
+img <- png::readPNG("figures/05_Ordination/All_Ordinations_PCoA_NMDS.png")
+
+grid.newpage()
+grid.raster(img)
 ```
+
+### INTERPRETATION 7
+
+Both PCoA and NMDS show substantial overlap between attempters and non-attempters, indicating no clear separation of microbial community composition between groups. Therefore, both ordination methods support the same biological conclusion that microbial communities are not strongly differentiated by AttemptStatus.
+
+PCoA likely provides the better representation of the data because it explains measurable variance along its axes (12–14.3% on Axis 1), allowing interpretation of how much variation is captured. In contrast, the NMDS stress value is relatively high, suggesting that the NMDS provides a less reliable representation of the original distance relationships.
+
+
+
+
 ```{r}
 ## 1. Run with by = terms for R² values, sensitive to order of variables! 
 ## ALWAYS check and confirm the order of your terms and how they interact with each other.  
@@ -388,16 +540,7 @@ sorensen_attempt_adonis <- adonis2(
 
 sorensen_attempt_adonis
 ```
-```{r}
-sorensen_attempt_adonis_terms2 <- 
-  adonis2(
-    scaled_sorensen_dist ~ AttemptStatus,
-    data = data.frame(sample_data(scaled_physeq)),
-    by = "terms"
-  )
 
-sorensen_attempt_adonis_terms2
-```
 ```{r}
 # Bray-Curtis
 ## ALWAYS check and confirm the order of your terms and how they interact with each other.  
@@ -410,16 +553,22 @@ bray_attempt_adonis_terms1 <-
 
 bray_attempt_adonis_terms1
 ```
-```{r}
-bray_attempt_adonis_terms2 <- 
-  adonis2(
-    scaled_bray_dist ~ AttemptStatus,
-    data = data.frame(sample_data(scaled_physeq)),
-    by = "terms"
-  )
 
-bray_attempt_adonis_terms2
-```
+
+### INTERPRETATION 8
+
+PERMANOVA analysis was conducted to test whether microbial community composition differed between attempters and non-attempters. For Sorensen distance, AttemptStatus explained only 2.56% of the variation (R² = 0.0256, p = 0.098). Similarly, Bray-Curtis distance showed that AttemptStatus explained 2.65% of the variation (R² = 0.0265, p = 0.141). In both cases, p-values were greater than 0.05, indicating that AttemptStatus did not significantly explain variation in microbial community composition.
+
+Because only one variable (AttemptStatus) was included in the model, testing different term orders was not applicable. Therefore, R² values could not change due to term order, and there is no indication of interactions or co-varying predictors in this model.
+
+These statistical results are consistent with the ordination analyses (PCoA and NMDS), where substantial overlap was observed between attempter and non-attempter samples. This overlap suggests weak separation between groups and supports the finding that community composition is similar across AttemptStatus groups.
+
+Biologically, these results suggest that suicide attempt status is not a strong driver of microbial community composition in this dataset. Therefore, I fail to reject the null hypothesis, indicating that microbial community composition does not differ significantly between attempters and non-attempters.
+
+
+# Betadisper: Testing Variances/Dispersions
+
+## Sorensen 
 ```{r}
 # Homogeneity of Dispersion test with beta disper
 # Sorensen Betadisper - AttemptStatus (Categorical)
@@ -433,27 +582,8 @@ dispr_sorensen_attempt <-
 # Permutation test
 permutest(dispr_sorensen_attempt)
 ```
+## Betadisper: Testing Variances/Dispersions
 
-```{r}
-# Sorensen Betadisper - AttemptStatus  
-
-dispr_sorensen_attempt2 <- 
-  betadisper(
-    scaled_sorensen_dist,
-    sample_data(scaled_physeq)$AttemptStatus
-  )
-
-permutest(dispr_sorensen_attempt2)
-```
-```{r}
-dispr_sorensen_attempt3 <- 
-  betadisper(
-    scaled_sorensen_dist,
-    sample_data(scaled_physeq)$AttemptStatus
-  )
-
-permutest(dispr_sorensen_attempt3)
-```
 ```{r}
 # Bray-Curtis Betadisper - AttemptStatus (Categorical)
 
@@ -465,6 +595,25 @@ dispr_bray_attempt <-
 
 permutest(dispr_bray_attempt)
 ```
+
+
+### INTERPRETATION 9 
+
+Betadisper analysis was conducted to test whether within-group dispersion differed between attempters and non-attempters. For Sorensen distance, the permutest result was not statistically significant (p = 0.426). Similarly, Bray-Curtis distance also showed no significant difference in dispersion between groups (p = 0.804). These results indicate that within-group variability is similar between attempters and non-attempters.
+
+Biologically, this suggests that microbial communities within each AttemptStatus group show similar levels of variability, indicating stable within-group community structure across samples.
+
+
+### INTERPRETATION 10 
+
+When considering both PERMANOVA and betadisper results together, there is no evidence of significant differences in microbial community composition between attempters and non-attempters. PERMANOVA results were not statistically significant for either Sorensen (p = 0.098) or Bray-Curtis (p = 0.141) distances, indicating that AttemptStatus does not significantly explain variation in microbial community composition.
+
+In addition, betadisper results were also not significant for both Sorensen (p = 0.426) and Bray-Curtis (p = 0.804), indicating that dispersion did not differ between groups. This confirms that the lack of significance observed in PERMANOVA is not due to unequal group variability.
+
+Biologically, these combined results suggest that suicide attempt status is not a strong driver of microbial community composition or variability in this dataset. Therefore, I fail to reject the null hypothesis and conclude that microbial communities do not differ significantly between attempters and non-attempters.
+
+
+
 ```{r}
 end_time <- Sys.time()
 end_time 
