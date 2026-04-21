@@ -270,8 +270,8 @@ table(sample_data(preprocessed_physeq)$AttemptStatus, useNA = "ifany")
 
 ```{r}
 attempt_colors <- c(
-  "Attempter" = "#D55E00",
-  "Non-attempter" = "#0072B2"
+  "Attempter" = "red",
+  "Non-attempter" = "blue"
 )
 
 soren_pcoa_plot <-
@@ -317,8 +317,8 @@ table(sample_data(scaled_physeq)$AttemptStatus, useNA = "ifany")
 
 
 attempt_colors <- c(
-  "Attempter" = "#D55E00",
-  "Non-attempter" = "#0072B2"
+  "Attempter" = "red",
+  "Non-attempter" = "blue"
 )
 
 scaled_soren_nmds <-
