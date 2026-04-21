@@ -65,20 +65,23 @@ iNEXT_input_df[1:5, 1:5]
 ```{r}
 # Run iNEXT
 
-iNEXT_data <- iNEXT(
-  iNEXT_input_df,
-  q = c(0, 1, 2),
-  datatype = "abundance"
-)
+#iNEXT_data <- iNEXT(
+#  iNEXT_input_df,
+#  q = c(0, 1, 2),
+#  datatype = "abundance"
+#)
 
 
-save(iNEXT_data, file = "data/iNEXT_data.RData")
+
+#save(iNEXT_data, file = "data/iNEXT_data.RData")
 ```
+
 
 ```{r}
 
 # Take a look 
 
+load("data/iNEXT_data.RData")
 str(iNEXT_data)
 typeof(iNEXT_data)
 ```
@@ -125,13 +128,23 @@ head(iNEXT_color_df)
 
 
 ```{r}
-
-ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") + 
-  scale_color_manual(values = iNEXT_color_df$attempt_colors) + 
-  scale_fill_manual(values = iNEXT_color_df$attempt_colors) + 
-  theme_bw() + 
-  theme(legend.position = "none") + 
+inext_plot <- ggiNEXT(iNEXT_data, type = 1, facet.var = "Order.q") +
+  scale_color_manual(values = iNEXT_color_df$attempt_colors) +
+  scale_fill_manual(values = iNEXT_color_df$attempt_colors) +
+  theme_bw() +
+  theme(legend.position = "none") +
   labs(y = "Effective Number of ASVs", x = "Number of Sequences")
+
+inext_plot
+
+# save my plot 
+ggsave(
+  filename = "../figures/04_Biodiversity/iNEXT_curve.png",
+  plot = inext_plot,
+  width = 12,
+  height = 6,
+  dpi = 300
+)
 ```
 
 
@@ -153,7 +166,8 @@ iNEXT_manual_df <-
 
 dim(iNEXT_manual_df)
 
-iNEXT_manual_df %>%
+rarefaction_plot <- 
+  iNEXT_manual_df %>%
   # Filter out rows that are calculated with actual sequences (no extrapolated)
   dplyr::filter(Method == "Rarefaction") %>%
   # Now, let's draw the plot! 
@@ -167,6 +181,14 @@ iNEXT_manual_df %>%
   theme_bw() + 
   labs(y = "Effective Number of ASVs", x = "Number of Sequences") + 
   theme(legend.position = "bottom")
+
+rarefaction_plot
+
+ggsave(
+  filename = "../figures/04_Biodiversity/manual_rarefaction_curves.png",
+  plot = rarefaction_plot,
+  width = 12,
+  height = 8)
 ```
 
 
@@ -241,12 +263,22 @@ attempt_ggboxplot <-
 # Show the plot
 
 attempt_ggboxplot
+
+# save the alpha richness boxplot
+ggsave(
+  filename = "../figures/04_Biodiversity/alpha_richness_boxplot.png",
+  plot = attempt_ggboxplot,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
 ```
 
 ```{r}
 # Plot boxplots 
 
-obs_div_df %>%
+alpha_all_q_plot <- 
+  obs_div_df %>%
   ggplot(aes(x = AttemptStatus, y = qD, fill = AttemptStatus, 
              color = AttemptStatus)) + 
   facet_wrap(.~Order.q, scales = "free_y") + 
@@ -263,6 +295,15 @@ obs_div_df %>%
         axis.text.x = element_text(angle = 30,
                                    hjust = 1, 
                                    vjust = 1))
+
+alpha_all_q_plot
+ggsave(
+  filename = "../figures/04_Biodiversity/alpha_diversity_all_q.png",
+  plot = alpha_all_q_plot,
+  width = 12,
+  height = 6,
+  dpi = 300
+)
 ```
 ```{r q = 0}
 # I use Wilcox instead of ANOVA, because my data is not normal.
@@ -332,7 +373,16 @@ rich_ggboxplot <-
                                    hjust = 1, 
                                    vjust = 1))
 
+
 rich_ggboxplot
+
+ggsave(
+  filename = "../figures/04_Biodiversity/richness_wilcoxon_boxplot.png",
+  plot = rich_ggboxplot,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
 ```
 
 
@@ -366,7 +416,17 @@ simps_ggboxplot <-
                                    vjust = 1))
 
 simps_ggboxplot
+
+ggsave(
+  filename = "../figures/04_Biodiversity/simpson_wilcoxon_boxplot.png",
+  plot = simps_ggboxplot,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
 ```
+
+
 ```{r}
 rich_ggboxplot + simps_ggboxplot
 ```
