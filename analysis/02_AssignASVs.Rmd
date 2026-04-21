@@ -78,6 +78,16 @@ reverse_error_plot <-
 
 forward_error_plot + reverse_error_plot
 
+error_model_plot <-
+  forward_error_plot + reverse_error_plot
+
+ggsave(
+  filename = "figures/02_AssignASVs/error_model_forward_reverse.png",
+  plot = error_model_plot,
+  width = 10,
+  height = 5,
+  dpi = 300
+)
 ```
 
 # Infer ASVs 
@@ -176,6 +186,18 @@ plot_ASVLength_raw <-
 # Show plot 
 
 plot_ASVLength_raw
+
+ASV_length_plot <- plot_ASVLength_raw
+
+
+
+ggsave(
+  filename = "figures/02_AssignASVs/ASV_length_distribution.png",
+  plot = ASV_length_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
 ```
 
 
@@ -210,6 +232,15 @@ plot_ASVLength_trimmed <-
 
 plot_ASVLength_trimmed
 
+ASV_length_trimmed_plot <- plot_ASVLength_trimmed
+
+ggsave(
+  filename = "figures/02_AssignASVs/ASV_length_trimmed_distribution.png",
+  plot = ASV_length_trimmed_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
 
 ```
 
@@ -251,6 +282,16 @@ plot_ASVLength_NoChimeras <-
 # Show the Plot 
 plot_ASVLength_NoChimeraS <- plot_ASVLength_NoChimeras
 plot_ASVLength_NoChimeras
+
+ASV_length_nochimera_plot <- plot_ASVLength_NoChimeras
+
+ggsave(
+  filename = "figures/02_AssignASVs/ASV_length_nochimera_distribution.png",
+  plot = ASV_length_nochimera_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
 ```
 
 
@@ -267,6 +308,20 @@ Based on the ASV length plots, the dominant peak remains around 400 to 430 bps, 
 ```{r}
 plot_ASVLength_raw + plot_ASVLength_trimmed + plot_ASVLength_NoChimeras + 
   plot_annotation(tag_levels = 'A')
+
+combined_ASV_length_plot <-
+  plot_ASVLength_raw +
+  plot_ASVLength_trimmed +
+  plot_ASVLength_NoChimeras +
+  plot_annotation(tag_levels = "A")
+
+ggsave(
+  filename = "figures/02_AssignASVs/ASV_length_all_steps.png",
+  plot = combined_ASV_length_plot,
+  width = 12,
+  height = 5,
+  dpi = 300
+)
 ```
 # Track the read counts 
 
@@ -312,6 +367,7 @@ track_counts_df <-
 DT::datatable(track_counts_df)
 
 # Plot it 
+track_reads_plot <-
 track_counts_df %>%
   pivot_longer(denoisedF:nochim, names_to = "read_type", values_to = "num_reads") %>%
   mutate(read_type = fct_relevel(read_type, "denoisedF", "denoisedR", "merged", "nochim")) %>%
@@ -322,7 +378,15 @@ track_counts_df %>%
   labs(x = "Filtering Step", y = "Number of Sequences") + 
   theme_bw()
 
+track_reads_plot
 
+ggsave(
+  filename = "figures/02_AssignASVs/read_tracking_plot.png",
+  plot = track_reads_plot,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
 ```
 
 
@@ -359,8 +423,20 @@ plot_ReadDepth_ASVRichness <-
 
 # Show the plots together 
 
-plot_ReadDepth + plot_ASVRichness + plot_ReadDepth_ASVRichness + 
+combined_read_depth_plot <- 
+  plot_ReadDepth + plot_ASVRichness + plot_ReadDepth_ASVRichness + 
   plot_annotation(tag_levels = "A")
+
+combined_read_depth_plot 
+
+ggsave(
+  filename = "figures/02_AssignASVs/read_depth_and_richness.png",
+  plot = combined_read_depth_plot,
+  width = 12,
+  height = 5,
+  dpi = 300
+)
+
 ```
 
 
