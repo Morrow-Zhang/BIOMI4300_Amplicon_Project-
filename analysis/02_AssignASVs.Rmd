@@ -145,6 +145,8 @@ table(nchar(getSequences(raw_ASV_table)))
 
 
 ```
+
+
 ### INTERPRETATION 1 
 
 1. The sequencing strategy used for the dataset is paired-end IIIumina sequencing (2*250 bp reads) tagrteing the 16s rRNA V3-V4 region.
@@ -175,14 +177,18 @@ plot_ASVLength_raw <-
 
 plot_ASVLength_raw
 ```
+
+
+
+
 ### INTERPRETATION 2
 
-The ASV length data generally matches the hypotheses proposed in INTERPRETATION #1. The histogram and length table show that most ASVs cluster between approximately 390 and 430 base pairs, with a strong peak centered around 410 bp. This observed range is consistent with the expected length of the 16S rRNA V3–V4 amplicon after primer removal, which was hypothesized to be approximately 422 bp. 
+The ASV length data generally matches the hypotheses proposed in INTERPRETATION #1. The histogram and length table show that most ASVs cluster between approximately 400 and 430 base pairs, with a strong peak centered around 410 bp. This observed range is consistent with the expected length of the 16S rRNA V3–V4 amplicon after primer removal, which was hypothesized to be approximately 422 bp. 
 
 
 ### INTERPRETATION 3 
 
-Taking into account INTERPRETATIONS #1 and #2, I suggest trimming the ASV sequences to an exact length of approximately 403 bp. The ASV length table and histogram show that most ASVs cluster tightly around 400–420 bp, with the median ASV length of 403 bp representing the dominant sequence length in the dataset. Although some shorter and longer sequences are present, these likely represent sequencing artifacts or non-target sequences. Therefore, trimming to an exact length of 403 bp will standardize the dataset and remove irregular sequences. 
+Taking into account INTERPRETATIONS #1 and #2, with Mar's suggestion, the ASV sequences should be trimmed to a range of length of approximately 400 to 404, 421 to 423, and 426 and 428 to avoid losing too much sequences. The ASV length table and histogram show that most ASVs cluster tightly around 400 to 428 bps. Although some shorter and longer sequences are present, these likely represent sequencing artifacts or non-target sequences. Therefore, trimming to length around 400 to 404, 421 to 423, and 426 and 428 will standardize the dataset and remove irregular sequences. 
 
 # Trim ASV lengths 
 
@@ -228,8 +234,10 @@ dim(noChimeras_ASV_table)
 # what proportion is left of the sequences? 
 # Chimera removal compared to trimming 
 percRetained_chimerasTrimmed <- sum(noChimeras_ASV_table) / sum(raw_ASV_table_trimmed)
+percRetained_chimerasTrimmed
 # Chimera removal compared to raw 
 percRetained_chimerasRaw <- sum(noChimeras_ASV_table) / sum(raw_ASV_table)
+percRetained_chimerasRaw
 
 # Plot it 
 plot_ASVLength_NoChimeras <- 
@@ -244,9 +252,14 @@ plot_ASVLength_NoChimeras <-
 plot_ASVLength_NoChimeraS <- plot_ASVLength_NoChimeras
 plot_ASVLength_NoChimeras
 ```
-### INTERPRETATION 4 
 
-After trimming, around 2.79% of the raw ASV sequences were retained. After chimera removal, 446 out of 479 trimmed ASVs were retained,  around 93.11% of the trimmed ASVs. Based on the ASV length plots, the trimming procedure appears appropriate. The raw ASV length distribution showed a clear dominant peak around 403 bp, which represents the expected target amplicon length. After trimming, nearly all ASVs were standardized to this dominant length, and only a small number of sequences were removed during chimera detection. The post-chimera plot still shows a strong peak at the expected length, indicating that most biologically meaningful sequences were retained. Therefore, the trimming and chimera removal steps successfully removed irregular and artifactual sequences while preserving the majority of valid ASVs.
+
+
+### INTERPRETATION 4
+
+After chimera removal, 2886 ASVs were retained across 49 samples. Approximately 95.33% of the trimmed sequences remained after chimera removal, and about 85.44% of the original raw sequences were retained overall. 
+
+Based on the ASV length plots, the dominant peak remains around 400 to 430 bps, which corresponds to the expected target amplicon length. After chimera removal, most ASVs remained concentrated at this expected length, with only a limited number of irregular sequences removed.Therefore, the chimera removal step effectively eliminated likely artificial sequences while preserving the majority of biologically meaningful ASVs, and the trimming and chimera filtering procedures appear appropriate.
 
 
 # Plot ASV Lengths 
@@ -349,16 +362,21 @@ plot_ReadDepth_ASVRichness <-
 plot_ReadDepth + plot_ASVRichness + plot_ReadDepth_ASVRichness + 
   plot_annotation(tag_levels = "A")
 ```
-### INTERPRETATION 5 
-Panel A shows variation in sequencing depth across samples. Most samples contain between approximately 200 and 1200 sequences while a few samples have much higher read counts above 2000–3000 sequences. Some samples appear to have very low read counts close to zero, which may indicate poor sequencing success or low-quality samples.
 
-Panel B shows that most samples contain between approximately 5 and 20 ASVs, with fewer samples containing higher ASV counts above 25–30. Samples with very low ASV counts likely correspond to those with low sequencing depth.
 
-Panel C shows a positive relationship between sequencing depth and ASV richness. Samples with higher sequencing depth tend to have more ASVs, indicating that sequencing depth strongly influences the number of detected ASVs. A few samples with low sequencing depth also have low ASV richness, suggesting possible sequencing failures or poor-quality samples.
+### INTERPRETATION 5
 
-Overall, these plots indicate that sequencing depth varies across samples and influences observed ASV richness. Some low-depth samples may need to be carefully evaluated or removed in later analyses. Additionally, normalization or rarefaction will likely be necessary in downstream analyses to account for differences in sequencing depth across samples.
+Panel A shows variation in sequencing depth across samples. Most samples contain approximately 20,000 to 30,000 total sequences, although a few samples have lower or higher sequencing depth.
+
+Panel B shows that most samples contain roughly 100 to 220 ASVs, with some samples having fewer and some exceeding 250 ASVs.
+
+Panel C shows a positive relationship between total sequencing depth and total ASV richness. In general, samples with higher sequencing depth tend to have more detected ASVs, indicating that sequencing depth influences the number of ASVs observed.
+
+Overall, these plots indicate that sequencing depth varies across samples and likely affects observed ASV richness. This suggests that sequencing depth should be considered in downstream diversity analyses.
+
 
 # Assign Taxonomy 
+
 
 ```{r}
 
@@ -578,7 +596,7 @@ write.table(
 )
 ```
 ```{r}
-save(track_counts_df, file = "data/track_read_counts.RData")
+#save(track_counts_df, file = "data/track_read_counts.RData")
 ```
 
 ```{r}
