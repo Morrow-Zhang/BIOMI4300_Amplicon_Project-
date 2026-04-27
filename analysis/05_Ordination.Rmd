@@ -413,6 +413,12 @@ grid.raster(img)
 
 ```
 
+
+
+### INTERPRETATION 5 
+The PCoA plots generated using Sorensen and Bray-Curtis dissimilarity show substantial overlap between attempters and non-attempters, although a few individual samples appear separated from the main clusters. This indicates that while some samples differ in microbial composition, there is no strong overall clustering of samples by AttemptStatus. The lack of clear group separation in both plots suggests that microbial community composition is not strongly differentiated between attempters and non-attempters based on visual inspection alone.
+
+
 # NMDS: Non-Metric Multidimensional Scaling
 
 ```{r}
