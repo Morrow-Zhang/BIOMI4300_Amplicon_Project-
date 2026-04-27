@@ -308,6 +308,8 @@ ggsave(
   dpi = 300
 )
 ```
+
+
 ```{r q = 0}
 # I use Wilcox instead of ANOVA, because my data is not normal.
 
