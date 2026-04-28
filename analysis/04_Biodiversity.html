@@ -11,7 +11,7 @@
 
 <meta name="author" content="Morrow Zhang" />
 
-<meta name="date" content="2026-04-21" />
+<meta name="date" content="2026-04-28" />
 
 <title>04_Biodiversity.Rmd</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">04_Biodiversity.Rmd</h1>
 <h4 class="author">Morrow Zhang</h4>
-<h4 class="date">2026-04-21</h4>
+<h4 class="date">2026-04-28</h4>
 
 </div>
 
@@ -368,8 +368,13 @@ microbial alpha diversity between hospitalized MDD patients with a
 recent suicide attempt and those without a history of suicide
 attempts.</p>
 <p>Alternative hypothesis: Hospitalized MDD patients with a recent
-suicide attempt exhibit higher gut microbial alpha diversity compared to
-MDD patients without a history of suicide attempts.</p>
+suicide attempt exhibit higher gut microbial alpha diversity across Hill
+diversity q = 0, q = 1, and q = 2 compared to MDD patients without a
+history of suicide attempts. Prior literature suggests that
+suicide-attempt status is associated with increased abundance of
+specific bacterial taxa, which may increase microbial richness (q = 0)
+and alter community evenness and dominance patterns reflected in q = 1
+and q = 2.</p>
 </div>
 <div id="set-seed-and-load-packages" class="section level1">
 <h1>Set seed and Load Packages</h1>
@@ -1582,10 +1587,10 @@ all ASVs, common ASVs, and dominant ASVs.</p>
 <h1>Info for Reproducibility</h1>
 <pre class="r"><code>end_time &lt;- Sys.time()
 end_time </code></pre>
-<pre><code>## [1] &quot;2026-04-21 14:45:52 EDT&quot;</code></pre>
+<pre><code>## [1] &quot;2026-04-28 17:22:39 EDT&quot;</code></pre>
 <pre class="r"><code>elapsed_time &lt;- round((end_time - start_time), 3)
 elapsed_time</code></pre>
-<pre><code>## Time difference of 14.4 secs</code></pre>
+<pre><code>## Time difference of 15.454 secs</code></pre>
 <pre class="r"><code>devtools::session_info()</code></pre>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value
@@ -1597,7 +1602,7 @@ elapsed_time</code></pre>
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2026-04-21
+##  date     2026-04-28
 ##  pandoc   3.1.1 @ /usr/lib/rstudio-server/bin/quarto/bin/tools/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────

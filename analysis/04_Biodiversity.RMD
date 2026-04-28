@@ -12,7 +12,7 @@ Scientific Question: Do hospitalized patients with major depressive disorder (MD
 
 Alpha diversity Null hypothesis: There is no difference in gut microbial alpha diversity between hospitalized MDD patients with a recent suicide attempt and those without a history of suicide attempts.
 
-Alternative hypothesis: Hospitalized MDD patients with a recent suicide attempt exhibit higher gut microbial alpha diversity compared to MDD patients without a history of suicide attempts.
+Alternative hypothesis: Hospitalized MDD patients with a recent suicide attempt exhibit higher gut microbial alpha diversity across Hill diversity q = 0, q = 1, and q = 2 compared to MDD patients without a history of suicide attempts. Prior literature suggests that suicide-attempt status is associated with increased abundance of specific bacterial taxa, which may increase microbial richness (q = 0) and alter community evenness and dominance patterns reflected in q = 1 and q = 2.
 
 # Set seed and Load Packages 
 
